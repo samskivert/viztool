@@ -37,7 +37,13 @@ public class HierarchyVisualizer implements Printable
         // dump all the classes into an array list so that we can
         // repeatedly scan through the list
         while (iter.hasNext()) {
-            _classes.add(iter.next());
+            // strip out inner classes, we'll catch those via their
+            // declaring classes
+            String name = (String)iter.next();
+            if (name.indexOf("$") != -1) {
+                continue;
+            }
+            _classes.add(name);
         }
 
         // compile a list of all packages in our collection
