@@ -51,6 +51,14 @@ if (!defined $jhome) {
 my $java = "$jhome/bin/java";
 my $jlib = "$jhome/lib/classes.zip";
 
+# use rt.jar if necessary
+if (! -f $jlib) {
+    $jlib = "$jhome/lib/rt.jar";
+}
+if (! -f $jlib) {
+    $jlib = "$jhome/jre/lib/rt.jar";
+}
+
 # make sure we can run the jvm
 if (! -x $java) {
     die "$0: Can't find a java interpreter in '$jhome'.\n";
