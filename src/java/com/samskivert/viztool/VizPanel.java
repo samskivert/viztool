@@ -42,14 +42,18 @@ public class VizPanel extends JPanel
         setFont(font);
     }
 
+    public void doLayout ()
+    {
+        super.doLayout();
+        Graphics2D gfx = (Graphics2D)getGraphics();
+        Rectangle2D bounds = getBounds();
+        _viz.layout(gfx, 0, 0, bounds.getWidth(), bounds.getHeight());
+    }
+
     public void paintComponent (Graphics g)
     {
         super.paintComponent(g);
-
-        Graphics2D gfx = (Graphics2D)g;
-        Rectangle2D bounds = getBounds();
-        _viz.layout(gfx, 0, 0, bounds.getWidth(), bounds.getHeight());
-        _viz.paint(gfx, _currentPage);
+        _viz.paint((Graphics2D)g, _currentPage);
     }
 
     public Dimension getPreferredSize ()

@@ -34,7 +34,7 @@ public class FontPicker
      */
     public static void init (boolean printing)
     {
-        int size = printing ? 8 : 10;
+        int size = printing ? 8 : 12;
         _titleFont = new Font("Helvetica", Font.BOLD, size);
         _classFont = new Font("Helvetica", Font.PLAIN, size);
         _ifaceFont = new Font("Helvetica", Font.ITALIC, size);

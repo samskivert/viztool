@@ -79,20 +79,16 @@ public class VizController extends Controller
         } else if (cmd.equals(PRINT)) {
             // create a pageable to be used by our print job that does the
             // right thing
-            Pageable pable = new Pageable()
-            {
-                public int getNumberOfPages ()
-                {
+            Pageable pable = new Pageable() {
+                public int getNumberOfPages () {
                     return _vpanel.getVisualizer().getPageCount();
                 }
 
-                public PageFormat getPageFormat (int pageIndex)
-                {
+                public PageFormat getPageFormat (int pageIndex) {
                     return _format;
                 }
 
-                public Printable getPrintable (int pageIndex)
-                {
+                public Printable getPrintable (int pageIndex) {
                     return _vpanel.getVisualizer();
                 }
             };
