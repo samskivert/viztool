@@ -98,6 +98,10 @@ public class ChainUtil
             Log.warning("Unable to process class [class=" + clazz +
                         ", error=" + e + "].");
             Log.logStackTrace(e);
+
+        } catch (NoClassDefFoundError ncdfe) {
+            Log.warning("Unable to load class [class=" + clazz +
+                        ", error=" + ncdfe + "].");
         }
     }
 
