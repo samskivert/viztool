@@ -30,7 +30,7 @@ import com.samskivert.util.CollectionUtil;
 
 import com.samskivert.viztool.Log;
 import com.samskivert.viztool.Visualizer;
-import com.samskivert.viztool.enum.PackageEnumerator;
+import com.samskivert.viztool.clenum.PackageEnumerator;
 
 /**
  * The hierarchy visualizer displays inheritance hierarchies in a compact
@@ -66,7 +66,7 @@ public class HierarchyVisualizer implements Visualizer
         for (int i = 0; iter.hasNext(); i++) {
             _packages[i] = (String)iter.next();
         }
-        Arrays.sort(_packages, Comparators.STRING);
+        Arrays.sort(_packages);
         // System.err.println("Scanned " + _packages.length + " packages.");
 
         // now create chain groups for each package

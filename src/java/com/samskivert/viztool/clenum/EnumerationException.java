@@ -1,5 +1,5 @@
 //
-// $Id$
+// $Id: EnumerationException.java,v 1.2 2001/08/12 04:36:57 mdb Exp $
 // 
 // viztool - a tool for visualizing collections of java classes
 // Copyright (C) 2001 Michael Bayne
@@ -18,36 +18,18 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.samskivert.viztool.enum;
+package com.samskivert.viztool.clenum;
 
 /**
- * The jar file enumerator enumerates all of the classes in a .jar class
- * archive.
+ * An enumeration exception is thrown when some problem occurs while
+ * attempting to enumerate over a classpath component. This may be when
+ * initially attempting to read a zip or jar file, or during the process
+ * of enumeration.
  */
-public class JarFileEnumerator extends ZipFileEnumerator
+public class EnumerationException extends Exception
 {
-    /**
-     * Constructs a prototype enumerator that can be used for matching.
-     */
-    public JarFileEnumerator ()
+    public EnumerationException (String message)
     {
+        super(message);
     }
-
-    /**
-     * Constructs a jar file enumerator with the specified jar file for
-     * enumeration.
-     */
-    public JarFileEnumerator (String jarpath)
-        throws EnumerationException
-    {
-        super(jarpath);
-    }
-
-    // documentation inherited from interface
-    public boolean matchesComponent (String component)
-    {
-        return component.endsWith(JAR_SUFFIX);
-    }
-
-    protected static final String JAR_SUFFIX = ".jar";
 }

@@ -1,5 +1,5 @@
 //
-// $Id$
+// $Id: ComponentEnumerator.java,v 1.2 2001/08/12 04:36:57 mdb Exp $
 // 
 // viztool - a tool for visualizing collections of java classes
 // Copyright (C) 2001 Michael Bayne
@@ -18,7 +18,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.samskivert.viztool.enum;
+package com.samskivert.viztool.clenum;
 
 import com.samskivert.util.StringUtil;
 
