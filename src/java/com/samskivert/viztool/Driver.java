@@ -39,6 +39,9 @@ public class Driver
             System.err.println("Warning: " + warnings[i].reason);
         }
 
+        // initialize the font picker
+        FontPicker.init(print);
+
         // and finally generate the visualization
         PackageEnumerator penum = new PackageEnumerator(pkgroot, enum, true);
         HierarchyVisualizer viz = new HierarchyVisualizer(pkgroot, penum);
