@@ -54,6 +54,13 @@ public class HierarchyVisualizer implements Printable
             pkgset.add(ChainUtil.pkgFromClass((String)iter.next()));
         }
 
+        // remove the packages on our exclusion list
+        String expkg = System.getProperty("exclude");
+        StringTokenizer tok = new StringTokenizer(expkg, ":");
+        while (tok.hasMoreTokens()) {
+            pkgset.remove(tok.nextToken());
+        }
+
         // sort our package names
         _packages = new String[pkgset.size()];
         iter = pkgset.iterator();
