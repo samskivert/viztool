@@ -114,9 +114,6 @@ public class HierarchyVisualizer implements Printable
         double starty = x;
         int pageno = 0;
 
-        System.out.println("Laying out " + width + "x" + height +
-                           "+" + x + "+" + y + ".");
-
         // lay out our groups
         for (int i = 0; i < _groups.length; i++) {
             // lay out the group in question

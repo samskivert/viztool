@@ -69,9 +69,6 @@ public class CascadingChainVisualizer
         double x = bounds.getX();
         double y = bounds.getY();
 
-//          System.err.println("Rendering " + chain.getName() +
-//                             " at +" + x + "+" + y + ".");
-
         // create a text layout based on the current rendering conditions
         Font font = chain.getRoot().isInterface() ? _ifaceFont : _classFont;
         TextLayout layout = new TextLayout(chain.getName(), font,

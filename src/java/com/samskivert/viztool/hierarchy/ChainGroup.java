@@ -70,9 +70,6 @@ public class ChainGroup
 
         _size = new Rectangle2D.Double();
         _size.setRect(0, 0, width + 2*BORDER, height + 2*BORDER);
-
-        System.out.println("L(" + _pkg + ") " + _size.getWidth() + "x" +
-            _size.getHeight() + "+" + _size.getX() + "+" + _size.getY() + ".");
         return _size;
     }
 
