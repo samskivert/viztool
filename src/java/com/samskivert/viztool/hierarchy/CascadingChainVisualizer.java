@@ -18,7 +18,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.samskivert.viztool.viz;
+package com.samskivert.viztool.hierarchy;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -26,6 +26,8 @@ import java.awt.font.TextLayout;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.*;
 import java.util.ArrayList;
+
+import com.samskivert.viztool.util.FontPicker;
 
 /**
  * The cascading chain visualizer lays out chains in the standard

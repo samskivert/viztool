@@ -25,7 +25,9 @@ import java.awt.print.*;
 
 import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.viztool.enum.*;
-import com.samskivert.viztool.viz.*;
+
+import com.samskivert.viztool.hierarchy.HierarchyVisualizer;
+import com.samskivert.viztool.util.FontPicker;
 
 /**
  * The application driver. This class parses the command line arguments
@@ -67,7 +69,7 @@ public class Driver
 
         // and finally generate the visualization
         PackageEnumerator penum = new PackageEnumerator(pkgroot, enum, true);
-        HierarchyVisualizer viz = new HierarchyVisualizer(pkgroot, penum);
+        Visualizer viz = new HierarchyVisualizer(pkgroot, penum);
 
         if (print) {
             // we use the print system to render things

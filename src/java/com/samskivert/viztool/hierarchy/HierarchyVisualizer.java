@@ -18,7 +18,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.samskivert.viztool.viz;
+package com.samskivert.viztool.hierarchy;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -26,6 +26,7 @@ import java.awt.print.*;
 import java.util.*;
 
 import com.samskivert.viztool.Log;
+import com.samskivert.viztool.Visualizer;
 import com.samskivert.viztool.enum.PackageEnumerator;
 import com.samskivert.util.Comparators;
 
@@ -34,7 +35,7 @@ import com.samskivert.util.Comparators;
  * representation so that an entire package can be displayed on a single
  * page (or small number of pages).
  */
-public class HierarchyVisualizer implements Printable
+public class HierarchyVisualizer implements Visualizer
 {
     /**
      * Constructs a hierarchy visualizer with the supplied enumerator as

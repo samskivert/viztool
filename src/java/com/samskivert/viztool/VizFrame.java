@@ -24,14 +24,13 @@ import java.awt.BorderLayout;
 import javax.swing.*;
 
 import com.samskivert.swing.*;
-import com.samskivert.viztool.viz.HierarchyVisualizer;
 
 /**
  * The top-level frame in which visualizations are displayed.
  */
 public class VizFrame extends JFrame
 {
-    public VizFrame (HierarchyVisualizer viz)
+    public VizFrame (Visualizer viz)
     {
         super("viztool");
 

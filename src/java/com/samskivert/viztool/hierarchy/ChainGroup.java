@@ -18,13 +18,17 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-package com.samskivert.viztool.viz;
+package com.samskivert.viztool.hierarchy;
 
 import java.awt.*;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.font.TextLayout;
 import java.util.*;
+
+import com.samskivert.viztool.layout.ElementLayout;
+import com.samskivert.viztool.layout.PackedColumnElementLayout;
+import com.samskivert.viztool.util.FontPicker;
 
 /**
  * A chain group is used to group together all of the classes from a
