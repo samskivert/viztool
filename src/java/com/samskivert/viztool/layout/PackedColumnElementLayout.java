@@ -22,9 +22,6 @@ public class PackedColumnElementLayout implements ElementLayout
         elements.toArray(elems);
         Arrays.sort(elems, HEIGHT_COMP);
 
-        System.out.println("Laying out in " +
-                           pageWidth + "x" + pageHeight + ".");
-
         // lay out the elements across the page
         ArrayList pagedims = new ArrayList();
         double x = 0, y = 0, rowheight = 0, maxwidth = 0;
@@ -65,8 +62,6 @@ public class PackedColumnElementLayout implements ElementLayout
             // lay this element out at our current coordinates
             elems[i].setBounds(x, y, bounds.getWidth(), bounds.getHeight());
 //              elems[i].setPage(pageno);
-            System.out.println("Laying out " + elems[i].getName() +
-                               " at " + elems[i].getBounds() + ".");
 
             // keep track of the maximum row height
             if (bounds.getHeight() > rowheight) {
