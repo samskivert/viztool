@@ -14,10 +14,10 @@ public interface CascadingConstants
     /**
      * The number of points surrounding the name of the chain.
      */
-    public static final int HEADER_BORDER = 3;
+    public static final double HEADER_BORDER = 3;
 
     /**
      * The number of points of spacing between each child chain.
      */
-    public static final int GAP = 4;
+    public static final double GAP = 4;
 }

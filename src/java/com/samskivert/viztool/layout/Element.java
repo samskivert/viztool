@@ -3,11 +3,10 @@
 
 package com.samskivert.viztool.viz;
 
-import java.awt.Point;
-import java.awt.Dimension;
+import java.awt.geom.Rectangle2D;
 
 /**
- * A page is composed of elements which have some rectangular dimension.
+ * A page is composed of elements which have some rectangular bounds.
  * They can be laid out by <code>ElementLayout</code> implementations in a
  * general purpose way.
  */
@@ -19,23 +18,12 @@ public interface Element
     public String getName ();
 
     /**
-     * Returns the size of this element. All coordinates are in points.
+     * Returns the bounds of this element.
      */
-    public Dimension getSize ();
+    public Rectangle2D getBounds ();
 
     /**
-     * Sets the upper left position of this element. All coordinates are
-     * in points.
+     * Sets the bounds of this element.
      */
-    public void setLocation (int x, int y);
-
-    /**
-     * Sets the page number of this element.
-     */
-    public void setPage (int pageno);
-
-    /**
-     * Returns the page number previously set by <code>setPage</code>.
-     */
-    public int getPage ();
+    public void setBounds (double x, double y, double width, double height);
 }
