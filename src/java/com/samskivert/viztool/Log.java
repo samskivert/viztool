@@ -1,7 +1,7 @@
 //
 // $Id$
 
-package com.samskivert.vistool;
+package com.samskivert.viztool;
 
 /**
  * A placeholder class that contains a reference to the log object used by
