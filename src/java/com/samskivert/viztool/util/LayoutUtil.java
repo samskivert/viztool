@@ -103,4 +103,38 @@ public class LayoutUtil
                        maxwid, bounds.getHeight() + height);
         return bounds;
     }
+
+    /**
+     * Returns a rectangle that accomodates the two specified columns of
+     * text at the bottom of the supplied rectangle, taking into account
+     * the preferred text spacing and the specified inset for the
+     * accomodated text.
+     */
+    public static Rectangle2D accomodate (
+        Rectangle2D bounds, Font font, FontRenderContext frc, double inset,
+        String[] left, String[] right)
+    {
+        double maxleft = 0, maxwid = bounds.getWidth();
+        double height = 0;
+
+        Rectangle2D[] bndl = new Rectangle2D[left.length];
+        Rectangle2D[] bndr = new Rectangle2D[right.length];
+
+        // first compute our dimensions
+        for (int i = 0; i < left.length; i++) {
+            bndl[i] = new TextLayout(left[i], font, frc).getBounds();
+            bndr[i] = new TextLayout(right[i], font, frc).getBounds();
+            maxleft = Math.max(maxleft, bndl[i].getWidth());
+        }
+
+        // now that we have the maxleft width we can calculate the rest
+        for (int i = 0; i < left.length; i++) {
+            maxwid = Math.max(maxwid, maxleft+GAP+bndr[i].getWidth()+inset);
+            height += Math.max(bndl[i].getHeight(), bndr[i].getHeight());
+        }
+
+        bounds.setRect(bounds.getX(), bounds.getY(),
+                       maxwid, bounds.getHeight() + height);
+        return bounds;
+    }
 }

@@ -70,8 +70,8 @@ public class Driver
 
         // and finally generate the visualization
         PackageEnumerator penum = new PackageEnumerator(pkgroot, enum, true);
-        Visualizer viz = new HierarchyVisualizer(pkgroot, penum);
-        // Visualizer viz = new SummaryVisualizer(pkgroot, penum);
+        // Visualizer viz = new HierarchyVisualizer(pkgroot, penum);
+        Visualizer viz = new SummaryVisualizer(pkgroot, penum);
 
         if (print) {
             // we use the print system to render things
