@@ -3,7 +3,7 @@
 
 package com.samskivert.viztool.viz;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 
@@ -55,6 +55,25 @@ public class Chain implements Element
     public String getRootName ()
     {
         return _root.getName();
+    }
+
+    /**
+     * Sorts this chain's children and the children's children so that a
+     * particular ordering is observed throughout the tree (generally
+     * alphabetical, but other orderings could be used).
+     */
+    public void sortChildren (Comparator comp)
+    {
+        // my kingdom for List.sort() or even ArrayList.sort()... sigh.
+        Chain[] kids = new Chain[_children.size()];
+        _children.toArray(kids);
+        Arrays.sort(kids, comp);
+        _children.clear();
+        for (int i = 0; i < kids.length; i++) {
+            // sort each child
+            kids[i].sortChildren(comp);
+            _children.add(kids[i]);
+        }
     }
 
     /**
