@@ -33,8 +33,6 @@ import java.io.File;
 import java.io.IOException;
 
 import java.net.URI;
-import java.net.URISyntaxException;
-
 import java.util.ArrayList;
 
 import org.apache.tools.ant.AntClassLoader;
@@ -195,20 +193,11 @@ public class DriverTask extends Task
             // tell our printjob to print to a file
             PrintRequestAttributeSet attrs =
                 new HashPrintRequestAttributeSet();
-            String outpath = _output.getPath();
-            try {
-                URI target = new URI("file:" + outpath);
-                attrs.add(new Destination(target));
-
-            } catch (URISyntaxException use) {
-                String errmsg = "Can't create URI for 'output' file path? " +
-                    "[output=" + outpath + "].";
-                throw new BuildException(errmsg, use);
-            }
+            attrs.add(new Destination(_output.toURI()));
 
             // invoke the printing process
             try {
-                log("Generating visualization to '" + outpath + "'.");
+                log("Generating visualization to '" + _output.getPath() + "'.");
                 job.print(attrs);
             } catch (PrinterException pe) {
                 throw new BuildException("Error printing visualization.", pe);
