@@ -42,6 +42,8 @@ public class VizPanel extends JPanel
 
     public void paintComponent (Graphics g)
     {
+        super.paintComponent(g);
+
         Graphics2D gfx = (Graphics2D)g;
         Rectangle2D bounds = getBounds();
         _viz.layout(gfx, 0, 0, bounds.getWidth(), bounds.getHeight());
