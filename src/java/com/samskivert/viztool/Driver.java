@@ -31,6 +31,7 @@ public class Driver
 
         // run ourselves on the classpath
         String classpath = System.getProperty("java.class.path");
+        // System.err.println("Scanning " + classpath + ".");
         ClassEnumerator enum = new ClassEnumerator(classpath);
 
         // print out the warnings
