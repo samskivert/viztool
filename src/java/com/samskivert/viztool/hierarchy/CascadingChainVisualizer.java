@@ -40,7 +40,7 @@ public class CascadingChainLayout
 
         // the children will be below the name of this chain and inset by
         // four points to make space for the connecty lines
-        int x = GAP, y = hhei;
+        int x = 2*GAP, y = hhei;
         ArrayList kids = chain.getChildren();
 
         for (int i = 0; i < kids.size(); i++) {

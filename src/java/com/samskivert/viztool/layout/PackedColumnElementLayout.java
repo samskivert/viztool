@@ -70,6 +70,11 @@ public class PackedColumnElementLayout implements ElementLayout
             x += (size.width + GAP);
         }
 
+        // take a final stab at our maxwidth
+        if (x > maxwidth) {
+            maxwidth = x;
+        }
+
         // make a note of how big the final page is
         pagedims.add(new Dimension(maxwidth, y+rowheight));
         Dimension[] dims = new Dimension[pagedims.size()];
