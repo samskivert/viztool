@@ -197,11 +197,5 @@ public class HierarchyVisualizer implements Printable
 
     protected PageFormat _format;
 
-    protected static final int PAGE_WIDTH = (int)(72 * 7.5);
-    protected static final int PAGE_HEIGHT = (int)(72 * 10);
-
-    protected static final int X_MARGIN = 72/2;
-    protected static final int Y_MARGIN = 72/2;
-
     protected static final int GAP = 72/4;
 }
