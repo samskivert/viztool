@@ -43,7 +43,7 @@ public class HierarchyVisualizer implements Printable
      * be supplied that returns only the classes to be visualized.
      *
      * @param pkgroot The name of the package that is being visualized.
-     * @param enum The enumerator that will return the names of all of the
+     * @param iter The enumerator that will return the names of all of the
      * classes in the specified package.
      */
     public HierarchyVisualizer (String pkgroot, Iterator iter)
