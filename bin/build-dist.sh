@@ -24,6 +24,7 @@ dist
 lib/*.jar
 code
 .excludes
+.cvsignore
 EOF
 
 # create our distribution directory
