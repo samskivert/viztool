@@ -37,7 +37,17 @@ public class VizFrame extends JFrame
         // quit if we're closed
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        JPanel content = new JPanel();
+
+        // put a border around everything
+        content.setBorder(BorderFactory.createEmptyBorder(
+            BORDER, BORDER, BORDER, BORDER));
+
         VizPanel panel = new VizPanel(viz);
-        getContentPane().add(panel, BorderLayout.CENTER);
+        content.add(panel, BorderLayout.CENTER);
+
+        setContentPane(content);
     }
+
+    protected static final int BORDER = 5; // pixels
 }
