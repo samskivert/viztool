@@ -1,3 +1,5 @@
+* Release 1.01:
+
 2001-08-13  Michael Bayne  <mdb@bering>
 
 	* bin/runjava: Wasn't incorporating the CLASSPATH environment
