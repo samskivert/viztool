@@ -30,17 +30,22 @@ import org.apache.regexp.RESyntaxException;
  */
 public class RegexpEnumerator extends FilterEnumerator
 {
-    public RegexpEnumerator (String regexp, Iterator source)
+    public RegexpEnumerator (String regexp, String exregex, Iterator source)
         throws RESyntaxException
     {
         super(source);
         _regexp = new RE(regexp);
+        if (exregex != null) {
+            _exreg = new RE(exregex);
+        }
     }
 
     protected boolean filterClass (String clazz)
     {
-        return !_regexp.match(clazz);
+        return !(_regexp.match(clazz) &&
+                 (_exreg == null || !_exreg.match(clazz)));
     }
 
     protected RE _regexp;
+    protected RE _exreg;
 }
