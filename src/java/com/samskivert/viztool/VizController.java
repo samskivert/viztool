@@ -60,9 +60,26 @@ public class VizController extends Controller
             return true;
 
         } else if (cmd.equals(PRINT)) {
-            // tell the job to print our visualizer with the format we set
-            // up earlier
-            _job.setPrintable(_vpanel.getVisualizer(), _format);
+            // create a pageable to be used by our print job that does the
+            // right thing
+            Pageable pable = new Pageable()
+            {
+                public int getNumberOfPages ()
+                {
+                    return _vpanel.getVisualizer().getPageCount();
+                }
+
+                public PageFormat getPageFormat (int pageIndex)
+                {
+                    return _format;
+                }
+
+                public Printable getPrintable (int pageIndex)
+                {
+                    return _vpanel.getVisualizer();
+                }
+            };
+            _job.setPageable(pable);
 
             // pop up a dialog to control printing
             if (_job.printDialog()) {
