@@ -14,7 +14,7 @@ import java.util.StringTokenizer;
  * The component enumerators are structured so that new enumerators can be
  * authored for new kinds of classpath component.
  */
-public class ClassEnumerator
+public class ClassEnumerator implements Enumerator
 {
     /**
      * Constructs a class enumerator with the supplied classpath. A set of
@@ -42,8 +42,8 @@ public class ClassEnumerator
 
             } else {
                 try {
-                    System.out.println("Adding [enum=" + enum +
-                                       ", component=" + component + "].");
+//                      System.out.println("Adding [enum=" + enum +
+//                                         ", component=" + component + "].");
                     // construct an enumerator to enumerate this component
                     // and put it on our list
                     _enums.add(enum.enumerate(component));
