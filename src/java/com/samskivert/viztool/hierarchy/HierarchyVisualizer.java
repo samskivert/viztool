@@ -80,10 +80,6 @@ public class HierarchyVisualizer implements Printable
         // adjust the stroke
         gfx.setStroke(new BasicStroke(0.1f));
 
-        // and the font
-        Font font = new Font("Courier", Font.PLAIN, 8);
-        gfx.setFont(font);
-
         // only relay things out if the page format has changed
         if (!pf.equals(_format)) {
             // keep this around

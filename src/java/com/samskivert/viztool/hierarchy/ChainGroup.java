@@ -44,7 +44,7 @@ public class ChainGroup
         }
 
         // we'll need room to incorporate our title
-        TextLayout layout = new TextLayout(_pkg, gfx.getFont(),
+        TextLayout layout = new TextLayout(_pkg, _titleFont,
                                            gfx.getFontRenderContext());
 
         // we let the title stick halfway up out of our rectangular
@@ -82,7 +82,7 @@ public class ChainGroup
      */
     public void render (Graphics2D gfx, double x, double y)
     {
-        TextLayout layout = new TextLayout(_pkg, gfx.getFont(),
+        TextLayout layout = new TextLayout(_pkg, _titleFont,
                                            gfx.getFontRenderContext());
 
         // we let the title stick halfway up out of our rectangular
@@ -137,4 +137,6 @@ public class ChainGroup
     protected Rectangle2D _size;
 
     protected static final double BORDER = 72/8;
+
+    protected static Font _titleFont = new Font("Helvetica", Font.BOLD, 8);
 }
