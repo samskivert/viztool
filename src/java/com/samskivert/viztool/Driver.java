@@ -101,7 +101,7 @@ public class Driver
 
         } else {
             VizFrame frame = new VizFrame(viz);
-            frame.setSize(640, 480);
+            frame.pack();
             SwingUtil.centerWindow(frame);
             frame.setVisible(true);
         }
