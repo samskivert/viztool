@@ -47,7 +47,7 @@ public class ChainGroup
         _pkg = pkg;
 
         // process the classes provided by our enumerator
-        _roots = ChainUtil.buildChains(pkgroot, iter);
+        _roots = ChainUtil.buildChains(pkgroot, pkg, iter);
 
         // sort our roots
         for (int i = 0; i < _roots.size(); i++) {

@@ -42,41 +42,21 @@ import com.samskivert.viztool.layout.PackedColumnElementLayout;
  */
 public class SummaryVisualizer implements Visualizer
 {
-    /**
-     * Constructs a summary visualizer with the supplied enumerator as its
-     * source of classes. If the summary enumerator should be limited to a
-     * particular set of classes (and it most likely should), a filter
-     * enumerator should be supplied that returns only the classes to be
-     * visualized.
-     *
-     * @param pkgroot The name of the top-level package in which the
-     * visualized classes reside. This will be used to shorten the package
-     * names that are displayed.
-     * @param iter The enumerator that will return the names of the
-     * classes for which visualization is desired.
-     */
-    public SummaryVisualizer (String pkgroot, Iterator iter)
+    // documentation inherited
+    public void setPackageRoot (String pkgroot)
     {
-        // keep track of the package root
         _pkgroot = pkgroot;
+    }
 
-        // create our class summaries
+    // documentation inherited
+    public void setClasses (Iterator iter)
+    {
+        // remove any old summaries
+        _summaries.clear();
+
+        // create the new summaries
         while (iter.hasNext()) {
-            // strip out inner classes, we'll catch those via their
-            // declaring classes
-            String name = (String)iter.next();
-            if (name.indexOf("$") != -1) {
-                continue;
-            }
-
-            // add a class summary instance for this class
-            try {
-                Class subject = Class.forName(name);
-                _summaries.add(new ClassSummary(subject, this));
-            } catch (Throwable t) {
-                Log.warning("Unable to introspect class [class=" + name +
-                            ", error=" + t + "].");
-            }
+            _summaries.add(new ClassSummary((Class)iter.next(), this));
         }
     }
 
@@ -235,7 +215,7 @@ public class SummaryVisualizer implements Visualizer
         }
     }
 
-    protected String _pkgroot;
+    protected String _pkgroot = "";
     protected ArrayList _summaries = new ArrayList();
     protected ArrayList _pages;
     protected PageFormat _format;
