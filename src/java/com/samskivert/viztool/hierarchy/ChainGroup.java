@@ -142,10 +142,10 @@ public class ChainGroup
 
     /**
      * Renders the chains in this group to the supplied graphics object.
-     * This function requires that <code>layoutGroup</code> has previously
-     * been called to lay out the group's chains.
+     * This function requires that <code>layout</code> has previously been
+     * called to lay out the group's chains.
      *
-     * @see #layoutGroup
+     * @see #layout
      */
     public void render (Graphics2D gfx, double x, double y)
     {
@@ -213,6 +213,10 @@ public class ChainGroup
 
     protected static final double BORDER = 72/8;
 
+    /**
+     * Compares the names of two chains. Used to sort them into
+     * alphabetical order.
+     */
     protected static class NameComparator implements Comparator
     {
         public int compare (Object o1, Object o2)

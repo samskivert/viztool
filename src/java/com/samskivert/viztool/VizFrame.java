@@ -8,16 +8,19 @@ import javax.swing.*;
 
 import com.samskivert.viztool.viz.HierarchyVisualizer;
 
-public class TestFrame extends JFrame
+/**
+ * The top-level frame in which visualizations are displayed.
+ */
+public class VizFrame extends JFrame
 {
-    public TestFrame (HierarchyVisualizer viz)
+    public VizFrame (HierarchyVisualizer viz)
     {
-        super("Test Frame");
+        super("viztool");
 
         // quit if we're closed
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        TestPanel panel = new TestPanel(viz);
+        VizPanel panel = new VizPanel(viz);
         getContentPane().add(panel, BorderLayout.CENTER);
     }
 }

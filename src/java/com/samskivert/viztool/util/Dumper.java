@@ -5,6 +5,9 @@ package com.samskivert.viztool.util;
 
 import java.lang.reflect.*;
 
+/**
+ * A simple utility that dumps out information available via reflection.
+ */
 public class Dumper
 {
     public void dump (Class clazz)

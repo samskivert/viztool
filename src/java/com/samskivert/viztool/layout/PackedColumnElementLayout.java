@@ -77,6 +77,11 @@ public class PackedColumnElementLayout implements ElementLayout
         return new Rectangle2D.Double(0, 0, maxwidth, y+rowheight);
     }
 
+    /**
+     * Compares the sizes of two elements. Used to sort them into order
+     * from highest to lowest. Secondarily sorts alphabetically on the
+     * element names.
+     */
     protected static class HeightComparator implements Comparator
     {
         public int compare (Object o1, Object o2)

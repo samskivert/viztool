@@ -9,9 +9,12 @@ import javax.swing.*;
 
 import com.samskivert.viztool.viz.HierarchyVisualizer;
 
-public class TestPanel extends JPanel
+/**
+ * A very simple UI element for displaying visualizations on screen.
+ */
+public class VizPanel extends JPanel
 {
-    public TestPanel (HierarchyVisualizer viz)
+    public VizPanel (HierarchyVisualizer viz)
     {
         _viz = viz;
 

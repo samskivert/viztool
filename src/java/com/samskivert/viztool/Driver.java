@@ -9,6 +9,10 @@ import java.awt.print.*;
 import com.samskivert.viztool.enum.*;
 import com.samskivert.viztool.viz.*;
 
+/**
+ * The application driver. This class parses the command line arguments
+ * and invokes the visualization code.
+ */
 public class Driver
 {
     public static void main (String[] args)
@@ -78,7 +82,7 @@ public class Driver
             System.exit(0);
 
         } else {
-            TestFrame frame = new TestFrame(viz);
+            VizFrame frame = new VizFrame(viz);
 
             // center the frame in the screen and show it
             Toolkit tk = frame.getToolkit();
