@@ -1,15 +1,8 @@
 <!-- build configuration -->
 <project name="viztool" default="compile" basedir=".">
 
-  <!-- things you may want to change -->
-  <property name="app.name"         value="viztool"/>
-  <property name="doc.packages"     value="com.samskivert.*"/>
-  <property name="doc.overview" value="com/samskivert/viztool/overview.html"/>
-  <property name="copyright.holder" value="Michael Bayne"/>
-  <property name="build.compiler"   value="jikes"/>
-  <property name="java.libraries"   value="/usr/share/java"/>
-
-  <!-- things you probably don't want to change -->
+  <!-- define various properties -->
+  <property name="app.name"     value="viztool"/>
   <property name="src.dir"     value="src/java"/>
   <property name="deploy.dir"  value="dist"/>
   <property name="dist.jar"    value="${app.name}.jar"/>
@@ -60,11 +53,11 @@
   <!-- build the javadoc documentation -->
   <target name="javadoc" depends="prepare">
     <javadoc sourcepath="${src.dir}"
-             packagenames="${doc.packages}"
+             packagenames="com.samskivert.*"
              windowtitle="${app.name} API"
              doctitle="${app.name} API"
-             overview="${src.dir}/${doc.overview}"
-             bottom="Copyright &#169; 2001 ${copyright.holder}. All Rights Reserved."
+             overview="${src.dir}/com/samskivert/viztool/overview.html"
+             bottom="Copyright &#169; 2001 Michael Bayne. All Rights Reserved."
              destdir="${javadoc.dir}"
              additionalparam="-breakiterator">
       <classpath refid="classpath"/>

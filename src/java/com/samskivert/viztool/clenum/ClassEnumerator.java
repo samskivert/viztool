@@ -20,9 +20,10 @@
 
 package com.samskivert.viztool.clenum;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.StringTokenizer;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 /**
  * The class enumerator is supplied with a classpath which it decomposes
@@ -46,7 +47,8 @@ public class ClassEnumerator implements Iterator
     public ClassEnumerator (String classpath)
     {
         // decompose the path and select enumerators for each component
-        StringTokenizer tok = new StringTokenizer(classpath, ":");
+        StringTokenizer tok =
+            new StringTokenizer(classpath, File.pathSeparator);
         ArrayList warnings = new ArrayList();
         ArrayList enums = new ArrayList();
 
