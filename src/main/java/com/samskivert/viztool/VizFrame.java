@@ -21,7 +21,10 @@
 package com.samskivert.viztool;
 
 import java.awt.BorderLayout;
-import javax.swing.*;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 import com.samskivert.swing.*;
 
@@ -78,8 +81,7 @@ public class VizFrame extends JFrame
         setContentPane(content);
     }
 
-    protected static final class ContentPanel
-        extends JPanel
+    protected static final class ContentPanel extends JPanel
         implements ControllerProvider
     {
         public ContentPanel (VizController ctrl)
