@@ -151,37 +151,6 @@ public class ClassEnumerator implements Iterator<String>
     protected String _nextClass;
     protected List<String> _warnings = new ArrayList<String>();
 
-    /**
-     * A warning is generated when a component of the classpath cannot be processed for some reason
-     * or other.
-     */
-    public static class Warning
-    {
-        public String reason;
-
-        public Warning (String reason)
-        {
-            this.reason = reason;
-        }
-    }
-
-    public static void main (String[] args)
-    {
-        // run ourselves on the classpath
-        String classpath = System.getProperty("java.class.path");
-        ClassEnumerator cenum = new ClassEnumerator(classpath);
-
-        // print out the warnings
-        for (String warning : cenum.getWarnings()) {
-            System.out.println("Warning: " + warning);
-        }
-
-        // enumerate over whatever classes we can
-        while (cenum.hasNext()) {
-            System.out.println("Class: " + cenum.next());
-        }
-    }
-
     protected static List<ComponentEnumerator> _enumerators = new ArrayList<ComponentEnumerator>();
     static {
         // register our enumerators
