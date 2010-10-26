@@ -29,13 +29,13 @@ import java.util.Iterator;
  * classes in a particular package or only considering interfaces, and so
  * on.
  */
-public abstract class FilterEnumerator implements Iterator
+public abstract class FilterEnumerator implements Iterator<String>
 {
     /**
      * Constructs a filter enumerator with the supplied class enumerator
      * as the source of classes.
      */
-    public FilterEnumerator (Iterator source)
+    public FilterEnumerator (Iterator<String> source)
     {
         _source = source;
         // we'd love to call scanToNextClass() here but that calls
@@ -53,7 +53,7 @@ public abstract class FilterEnumerator implements Iterator
         return _nextClass != null;
     }
 
-    public Object next ()
+    public String next ()
     {
         if (_nextClass == null) {
             scanToNextClass();
@@ -72,7 +72,7 @@ public abstract class FilterEnumerator implements Iterator
     protected void scanToNextClass ()
     {
         while (_source.hasNext()) {
-            String clazz = (String)_source.next();
+            String clazz = _source.next();
             if (!filterClass(clazz)) {
                 _nextClass = clazz;
                 break;
@@ -87,6 +87,6 @@ public abstract class FilterEnumerator implements Iterator
      */
     protected abstract boolean filterClass (String clazz);
 
-    protected Iterator _source;
+    protected Iterator<String> _source;
     protected String _nextClass;
 }

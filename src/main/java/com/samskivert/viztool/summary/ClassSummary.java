@@ -23,7 +23,6 @@ package com.samskivert.viztool.summary;
 import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.font.FontRenderContext;
-import java.awt.font.TextLayout;
 import java.awt.geom.Line2D;
 import java.awt.geom.Rectangle2D;
 
@@ -37,7 +36,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import com.samskivert.viztool.Log;
 import com.samskivert.viztool.layout.Element;
 import com.samskivert.viztool.util.FontPicker;
 import com.samskivert.viztool.util.LayoutUtil;
@@ -54,20 +52,20 @@ public class ClassSummary
     /**
      * Constructs a class summary for the specified class.
      */
-    public ClassSummary (Class subject, SummaryVisualizer viz)
+    public ClassSummary (Class<?> subject, SummaryVisualizer viz)
     {
         _viz = viz;
         _subject = subject;
         _name = _viz.name(_subject);
 
         // obtain information on our subject class
-        Class parent = _subject.getSuperclass();
+        Class<?> parent = _subject.getSuperclass();
         if (parent != null && !parent.equals(Object.class)) {
             _parentName = _viz.name(parent);
         }
 
         // get the implemented interfaces
-        Class[] interfaces = _subject.getInterfaces();
+        Class<?>[] interfaces = _subject.getInterfaces();
         int icount = interfaces.length;
         _interfaces = new String[icount];
         for (int i = 0; i < icount; i++) {
@@ -76,11 +74,8 @@ public class ClassSummary
 
         // create a comparator that we can use to sort the fields and
         // methods alphabetically and by staticness
-        Comparator comp = new Comparator() {
-            public int compare (Object o1, Object o2) {
-                Member m1 = (Member)o1;
-                Member m2 = (Member)o2;
-
+        Comparator<Member> comp = new Comparator<Member>() {
+            public int compare (Member m1, Member m2) {
                 int s1 = m1.getModifiers() & Modifier.STATIC;
                 int s2 = m2.getModifiers() & Modifier.STATIC;
 
@@ -103,8 +98,8 @@ public class ClassSummary
         // get the public fields
         Field[] fields = _subject.getDeclaredFields();
         Arrays.sort(fields, comp);
-        ArrayList fsigtypes = new ArrayList();
-        ArrayList fsigs = new ArrayList();
+        ArrayList<String> fsigtypes = new ArrayList<String>();
+        ArrayList<String> fsigs = new ArrayList<String>();
         for (int i = 0; i < fields.length; i++) {
             Field f = fields[i];
             if ((f.getModifiers() & Modifier.PUBLIC) != 0) {
@@ -118,11 +113,11 @@ public class ClassSummary
         fsigs.toArray(_fields);
 
         // get the public constructors and methods
-        ArrayList sigrets = new ArrayList();
-        ArrayList sigs = new ArrayList();
-        Constructor[] ctors = _subject.getConstructors();
+        ArrayList<String> sigrets = new ArrayList<String>();
+        ArrayList<String> sigs = new ArrayList<String>();
+        Constructor<?>[] ctors = _subject.getConstructors();
         for (int i = 0; i < ctors.length; i++) {
-            Constructor c = ctors[i];
+            Constructor<?> c = ctors[i];
             // make sure it's public
             if ((c.getModifiers() & Modifier.PUBLIC) != 0 &&
                 // skip the zero argument constructor because it's
@@ -317,11 +312,11 @@ public class ClassSummary
     /**
      * Generates a signature for the supplied constructor.
      */
-    public String genConstructorSig (Constructor ctor)
+    public String genConstructorSig (Constructor<?> ctor)
     {
         StringBuffer buf = new StringBuffer();
         buf.append(_viz.name(ctor.getDeclaringClass())).append(" (");
-        Class[] ptypes = ctor.getParameterTypes();
+        Class<?>[] ptypes = ctor.getParameterTypes();
         for (int i = 0; i < ptypes.length; i++) {
             if (i > 0) {
                 buf.append(", ");
@@ -329,7 +324,7 @@ public class ClassSummary
             buf.append(_viz.name(ptypes[i]));
         }
         buf.append(")");
-        Class[] etypes = ctor.getExceptionTypes();
+        Class<?>[] etypes = ctor.getExceptionTypes();
         if (etypes.length > 0) {
             buf.append(" throws ");
             for (int i = 0; i < etypes.length; i++) {
@@ -362,7 +357,7 @@ public class ClassSummary
     {
         StringBuffer buf = new StringBuffer();
         buf.append(method.getName()).append(" (");
-        Class[] ptypes = method.getParameterTypes();
+        Class<?>[] ptypes = method.getParameterTypes();
         for (int i = 0; i < ptypes.length; i++) {
             if (i > 0) {
                 buf.append(", ");
@@ -370,7 +365,7 @@ public class ClassSummary
             buf.append(_viz.name(ptypes[i]));
         }
         buf.append(")");
-        Class[] etypes = method.getExceptionTypes();
+        Class<?>[] etypes = method.getExceptionTypes();
         if (etypes.length > 0) {
             buf.append(" throws ");
             for (int i = 0; i < etypes.length; i++) {
@@ -393,7 +388,7 @@ public class ClassSummary
     protected SummaryVisualizer _viz;
 
     /** The class for which we're generating a summary visualization. */
-    protected Class _subject;
+    protected Class<?> _subject;
 
     /** The cleaned up name of the class we're summarizing. */
     protected String _name;

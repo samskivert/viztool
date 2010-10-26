@@ -118,7 +118,7 @@ public class ZipFileEnumerator extends ComponentEnumerator
     }
 
     protected ZipFile _zipfile;
-    protected Enumeration _entenum;
+    protected Enumeration<? extends ZipEntry> _entenum;
     protected String _nextClass;
 
     protected static final String ZIP_SUFFIX = ".zip";

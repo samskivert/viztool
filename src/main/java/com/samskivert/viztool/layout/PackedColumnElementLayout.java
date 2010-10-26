@@ -39,19 +39,18 @@ public class PackedColumnElementLayout implements ElementLayout
     }
 
     // docs inherited from interface
-    public Rectangle2D layout (List elements, double pageWidth,
-                               double pageHeight, List overflow)
+    public <E extends Element> Rectangle2D layout (
+        List<E> elements, double pageWidth, double pageHeight, List<E> overflow)
     {
         // sort the elements first by height then alphabetically
-        Element[] elems = new Element[elements.size()];
-        elements.toArray(elems);
-        Arrays.sort(elems, new ElementComparator(_byHeight));
+    	List<E> sorted = new ArrayList<E>(elements);
+        Collections.sort(sorted, new ElementComparator(_byHeight));
 
         // lay out the elements across the page
         double x = 0, y = 0, rowheight = 0, maxwidth = 0;
 
-        for (int i = 0; i < elems.length; i++) {
-            Rectangle2D bounds = elems[i].getBounds();
+        for (E elem : sorted) {
+            Rectangle2D bounds = elem.getBounds();
 
             // see if we fit into this row or not (but force placement if
             // we're currently at the left margin)
@@ -76,14 +75,14 @@ public class PackedColumnElementLayout implements ElementLayout
             // currently at the top margin)
             if ((y > 0) && ((y + bounds.getHeight()) > pageHeight)) {
                 // if we didn't fit, we go onto the overflow list
-                overflow.add(elems[i]);
+                overflow.add(elem);
                 // and continue on because maybe some shorter elements
                 // further down the list will fit
                 continue;
             }
 
             // lay this element out at our current coordinates
-            elems[i].setBounds(x, y, bounds.getWidth(), bounds.getHeight());
+            elem.setBounds(x, y, bounds.getWidth(), bounds.getHeight());
 
             // keep track of the maximum row height
             if (bounds.getHeight() > rowheight) {
@@ -108,18 +107,16 @@ public class PackedColumnElementLayout implements ElementLayout
      * from highest to lowest. Secondarily sorts alphabetically on the
      * element names.
      */
-    protected static class ElementComparator implements Comparator
+    protected static class ElementComparator implements Comparator<Element>
     {
         public ElementComparator (boolean byHeight)
         {
             _byHeight = byHeight;
         }
 
-        public int compare (Object o1, Object o2)
+        public int compare (Element e1, Element e2)
         {
-            Element e1 = (Element)o1;
-            Element e2 = (Element)o2;
-            int diff = 0;
+           	int diff = 0;
 
             // if we're sorting by height, check that now
             if (_byHeight) {

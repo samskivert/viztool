@@ -35,7 +35,7 @@ public class Chain implements Element
     /**
      * Constructs a chain with the specified class as its root.
      */
-    public Chain (String name, Class root, boolean inpkg)
+    public Chain (String name, Class<?> root, boolean inpkg)
     {
         _name = name;
         _root = root;
@@ -54,7 +54,7 @@ public class Chain implements Element
     /**
      * Returns the class that forms the root of this chain.
      */
-    public Class getRoot ()
+    public Class<?> getRoot ()
     {
         return _root;
     }
@@ -81,7 +81,7 @@ public class Chain implements Element
      * particular ordering is observed throughout the tree (generally
      * alphabetical, but other orderings could be used).
      */
-    public void sortChildren (Comparator comp)
+    public void sortChildren (Comparator<Chain> comp)
     {
         // my kingdom for List.sort() or even ArrayList.sort()... sigh.
         Chain[] kids = new Chain[_children.size()];
@@ -100,7 +100,7 @@ public class Chain implements Element
      */
     public String[] getImplementsNames ()
     {
-        Class[] ifaces = _root.getInterfaces();
+        Class<?>[] ifaces = _root.getInterfaces();
         String[] names = new String[ifaces.length];
         String pkg = ChainUtil.pkgFromClass(_root.getName());
 
@@ -154,8 +154,8 @@ public class Chain implements Element
      */
     public String[] getDeclaresNames ()
     {
-        Class[] decls = _root.getDeclaredClasses();
-        ArrayList names = new ArrayList();
+        Class<?>[] decls = _root.getDeclaredClasses();
+        ArrayList<String> names = new ArrayList<String>();
 
         for (int i = 0; i < decls.length; i++) {
             String name = decls[i].getName();
@@ -208,7 +208,7 @@ public class Chain implements Element
      * will not be null. This list should <em>not</em> be modified. Oh,
      * for a <code>const</code> keyword.
      */
-    public ArrayList getChildren ()
+    public ArrayList<Chain> getChildren ()
     {
         return _children;
     }
@@ -256,7 +256,7 @@ public class Chain implements Element
     {
         // first layout our children
         for (int i = 0; i < _children.size(); i++) {
-            Chain child = (Chain)_children.get(i);
+            Chain child = _children.get(i);
             child.layout(gfx, cviz);
         }
 
@@ -275,7 +275,7 @@ public class Chain implements Element
         Chain oflow = null;
 
         for (int i = 0; i < _children.size(); i++) {
-            Chain child = (Chain)_children.get(i);
+            Chain child = _children.get(i);
 
             // if we've switched to flowing over, just add this chain to
             // the overflow chain (and remove it from ourselves)
@@ -286,7 +286,7 @@ public class Chain implements Element
             }
 
             Rectangle2D cbounds = child.getBounds();
-            double cx = cbounds.getX(), cy = cbounds.getY();
+            double cy = cbounds.getY();
 
             // if this child doesn't fit in the current space, we need to
             // break it up and overflow the extra nodes
@@ -330,7 +330,7 @@ public class Chain implements Element
             // that the chain visualizer isn't leaving any gap beyond the
             // bottom of a child chain but it's somewhat safe because if
             // they did, that gap would accumulate unaesthetically
-            Chain child = (Chain)_children.get(_children.size()-1);
+            Chain child = _children.get(_children.size()-1);
             Rectangle2D cbounds = child.getBounds();
             _bounds.setRect(_bounds.getX(), _bounds.getY(), _bounds.getWidth(),
                             cbounds.getY() + cbounds.getHeight());
@@ -348,7 +348,7 @@ public class Chain implements Element
      * Adds a child to this chain. The specified class is assumed to
      * directly inherit from the class that is the root of this chain.
      */
-    public void addClass (String name, Class child)
+    public void addClass (String name, Class<?> child)
     {
         // we assume that the addition of a derived class is only done for
         // classes that are in the package we're visualizing. out of
@@ -365,7 +365,7 @@ public class Chain implements Element
      * it is a registered child of this chain. Returns null if no child
      * chain of this chain contains the specified target class.
      */
-    public Chain getChain (Class target)
+    public Chain getChain (Class<?> target)
     {
         if (_root.equals(target)) {
             return this;
@@ -373,7 +373,7 @@ public class Chain implements Element
 
         // just do a depth first search because it's fun
         for (int i = 0; i < _children.size(); i++) {
-            Chain chain = ((Chain)_children.get(i)).getChain(target);
+            Chain chain = _children.get(i).getChain(target);
             if (chain != null) {
                 return chain;
             }
@@ -404,15 +404,15 @@ public class Chain implements Element
     {
         out.append(indent).append(_name).append("\n");
         for (int i = 0; i < _children.size(); i++) {
-            Chain child = (Chain)_children.get(i);
+            Chain child = _children.get(i);
             child.toString(indent + "  ", out);
         }
     }
 
     protected String _name;
-    protected Class _root;
+    protected Class<?> _root;
     protected boolean _inpkg;
 
-    protected ArrayList _children = new ArrayList();
+    protected ArrayList<Chain> _children = new ArrayList<Chain>();
     protected Rectangle2D _bounds = new Rectangle2D.Double();
 }

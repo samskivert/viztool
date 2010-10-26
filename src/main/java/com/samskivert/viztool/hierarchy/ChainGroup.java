@@ -41,7 +41,7 @@ public class ChainGroup
      * specified package root and an iterator that is configured only to
      * return classes from the specified package.
      */
-    public ChainGroup (String pkgroot, String pkg, Iterator iter)
+    public ChainGroup (String pkgroot, String pkg, Iterator<?> iter)
     {
         // keep track of the package
         _pkg = pkg;
@@ -51,14 +51,14 @@ public class ChainGroup
 
         // sort our roots
         for (int i = 0; i < _roots.size(); i++) {
-            Chain root = (Chain)_roots.get(i);
+            Chain root = _roots.get(i);
             root.sortChildren(NAME_COMP);
         }
 
         // System.err.println(_roots.size() + " chains for " + pkg + ".");
     }
 
-    protected ChainGroup (String pkg, ArrayList roots)
+    protected ChainGroup (String pkg, ArrayList<Chain> roots)
     {
         _pkg = pkg;
         _roots = roots;
@@ -126,7 +126,7 @@ public class ChainGroup
         // lay out the internal structure of our chains
         ChainVisualizer clay = new CascadingChainVisualizer();
         for (int i = 0; i < _roots.size(); i++) {
-            Chain chain = (Chain)_roots.get(i);
+            Chain chain = _roots.get(i);
             Chain oflow = chain.layout(gfx, clay, pageWidth, pageHeight);
             // if this chain overflowed when being laid out, add the newly
             // created root to our list
@@ -137,7 +137,7 @@ public class ChainGroup
 
         // arrange them on the page
         ElementLayout elay = new PackedColumnElementLayout();
-        ArrayList overflow = new ArrayList();
+        ArrayList<Chain> overflow = new ArrayList<Chain>();
         _size = elay.layout(_roots, pageWidth, pageHeight, overflow);
 
         // make sure we're wide enough for our title
@@ -193,9 +193,7 @@ public class ChainGroup
         // render our chains
         ChainVisualizer renderer = new CascadingChainVisualizer();
         for (int i = 0; i < _roots.size(); i++) {
-            Chain chain = (Chain)_roots.get(i);
-            Rectangle2D bounds = chain.getBounds();
-            // render the chain
+            Chain chain = _roots.get(i);
             renderer.renderChain(chain, gfx);
         }
 
@@ -217,7 +215,7 @@ public class ChainGroup
 
     public Chain getRoot (int index)
     {
-        return (Chain)_roots.get(index);
+        return _roots.get(index);
     }
 
     public String toString ()
@@ -227,7 +225,7 @@ public class ChainGroup
     }
 
     protected String _pkg;
-    protected ArrayList _roots;
+    protected ArrayList<Chain> _roots;
 
     protected Rectangle2D _size;
     protected int _page;
@@ -238,20 +236,12 @@ public class ChainGroup
      * Compares the names of two chains. Used to sort them into
      * alphabetical order.
      */
-    protected static class NameComparator implements Comparator
+    protected static class NameComparator implements Comparator<Chain>
     {
-        public int compare (Object o1, Object o2)
-        {
-            Chain c1 = (Chain)o1;
-            Chain c2 = (Chain)o2;
+        public int compare (Chain c1, Chain c2) {
             return c1.getName().compareTo(c2.getName());
-        }
-
-        public boolean equals (Object other)
-        {
-            return (other == this);
         }
     }
 
-    protected static final Comparator NAME_COMP = new NameComparator();
+    protected static final Comparator<Chain> NAME_COMP = new NameComparator();
 }

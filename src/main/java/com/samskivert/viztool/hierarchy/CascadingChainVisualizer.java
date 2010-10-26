@@ -22,7 +22,6 @@ package com.samskivert.viztool.hierarchy;
 
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.font.TextLayout;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.*;
 import java.util.ArrayList;
@@ -77,10 +76,10 @@ public class CascadingChainVisualizer
         // the children will be below the name of this chain and inset by
         // four points to make space for the connecty lines
         double x = 2*LayoutUtil.GAP, y = bounds.getHeight();
-        ArrayList kids = chain.getChildren();
+        ArrayList<Chain> kids = chain.getChildren();
 
         for (int i = 0; i < kids.size(); i++) {
-            Chain kid = (Chain)kids.get(i);
+            Chain kid = kids.get(i);
             Rectangle2D kbounds = kid.getBounds();
             y += LayoutUtil.GAP; // add the gap
             kid.setBounds(x, y, kbounds.getWidth(), kbounds.getHeight());
@@ -155,7 +154,7 @@ public class CascadingChainVisualizer
         y = bounds.getY();
 
         // render our connecty lines
-        ArrayList kids = chain.getChildren();
+        ArrayList<?> kids = chain.getChildren();
         if (kids.size() > 0) {
             GeneralPath path = new GeneralPath();
             Rectangle2D kbounds = ((Chain)kids.get(0)).getBounds();

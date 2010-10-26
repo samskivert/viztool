@@ -23,7 +23,6 @@ package com.samskivert.viztool.clenum;
 import java.io.*;
 import java.util.ArrayList;
 
-import com.samskivert.util.StringUtil;
 import com.samskivert.viztool.Log;
 
 /**
@@ -104,7 +103,7 @@ public class DirectoryEnumerator extends ComponentEnumerator
         // if we have no drecords, we have nothing to do
         while (_drecords.size() > 0) {
             // grab a reference to the last drecord in the list
-            DirRecord rec = (DirRecord)_drecords.get(_drecords.size()-1);
+            DirRecord rec = _drecords.get(_drecords.size()-1);
 
             // grab the file related to our current position
             File target = rec.kids[rec.kidpos];
@@ -176,6 +175,6 @@ public class DirectoryEnumerator extends ComponentEnumerator
 
     protected File _root;
     protected String _rootpath;
-    protected ArrayList _drecords = new ArrayList();
+    protected ArrayList<DirRecord> _drecords = new ArrayList<DirRecord>();
     protected String _nextClass;
 }

@@ -40,7 +40,7 @@ public interface Visualizer extends Printable
      * Provides the visualizer with an iterator over all of the {@link
      * Class} instances that it will be visualizing.
      */
-    public void setClasses (Iterator iterator);
+    public void setClasses (Iterator<Class<?>> iterator);
 
     /**
      * Requests that the visualization lay itself out in pages with the

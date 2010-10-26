@@ -2,10 +2,8 @@
   <!-- various configurations -->
   <property name="lib.name"    value="viztool"/>
   <property name="src.dir"     value="src/main/java"/>
-  <property name="test.dir"    value="src/test/java"/>
   <property name="deploy.dir"  value="target"/>
   <property name="classes.dir" value="${deploy.dir}/classes"/>
-  <property name="tclasses.dir" value="${deploy.dir}/test-classes"/>
   <property name="javadoc.dir" value="${deploy.dir}/docs"/>
 
   <property name="maven-ant.vers" value="2.1.1"/>
@@ -34,24 +32,12 @@
     <delete dir="${deploy.dir}"/>
   </target>
 
-  <target name="compile" depends="-prepare" description="Compiles main and test sources.">
+  <target name="compile" depends="-prepare" description="Compiles main sources.">
     <mkdir dir="${classes.dir}"/>
     <copy todir="${classes.dir}"><fileset dir="src/main/resources" includes="**"/></copy>
     <javac srcdir="${src.dir}" destdir="${classes.dir}" includeAntRuntime="false"
            debug="on" optimize="${build.optimize}" source="1.5" target="1.5" encoding="utf-8">
       <classpath refid="classpath"/>
-      <compilerarg value="-Xlint"/>
-      <compilerarg value="-Xlint:-serial"/>
-    </javac>
-
-    <mkdir dir="${tclasses.dir}"/>
-    <copy todir="${tclasses.dir}"><fileset dir="src/test/resources" includes="**"/></copy>
-    <javac srcdir="${test.dir}" destdir="${tclasses.dir}" includeAntRuntime="false"
-           debug="on" optimize="${build.optimize}" source="1.5" target="1.5" encoding="utf-8">
-      <classpath>
-        <path refid="classpath"/>
-       <pathelement location="${classes.dir}"/>
-      </classpath>
       <compilerarg value="-Xlint"/>
       <compilerarg value="-Xlint:-serial"/>
     </javac>
@@ -73,62 +59,27 @@
     </javadoc>
   </target>
 
-  <!-- a target for rebuilding everything -->
   <target name="all" depends="clean,compile,javadoc,dist"
           description="Cleans and rebuilds everything."/>
 
-  <property name="test" value=""/>
-  <target name="tests" depends="compile" 
-          description="Runs unit tests. Use -Dtest=Foo to run only FooTest.">
-    <taskdef name="unit" classpathref="classpath"
-      classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask"/>
-    <unit printsummary="off" haltonfailure="yes" fork="${junit.fork}">
-      <classpath>
-        <pathelement location="${classes.dir}"/>
-        <pathelement location="${tclasses.dir}"/>
-        <path refid="classpath"/>
-        <fileset dir="lib/test" includes="*.jar"/>
-      </classpath>
-      <sysproperty key="test_dir" value="${tclasses.dir}"/>
-      <formatter type="brief" usefile="false"/>
-      <batchtest>
-        <fileset dir="${test.dir}" includes="**/*${test}*Test.java"/>
-      </batchtest>
-    </unit>
-  </target>
-
   <target name="dist" depends="compile" description="Builds jar files.">
     <jar destfile="${deploy.dir}/${lib.name}.jar" basedir="${classes.dir}"/>
-    <!-- we export a small selection of classes for use by GWT -->
-    <mkdir dir="${gwtjar.dir}"/>
-    <copy todir="${gwtjar.dir}">
-      <fileset dir="src/main/resources" includes="com/samskivert/Utils.gwt.xml"/>
-      <fileset dir="${src.dir}" includes="com/samskivert/text/MessageUtil.java"/>
-      <fileset dir="${src.dir}" includes="com/samskivert/util/ByteEnum.java"/>
-      <fileset dir="${src.dir}" includes="com/samskivert/util/ByteEnumUtil.java"/>
-    </copy>
-    <jar basedir="${gwtjar.dir}" destfile="${deploy.dir}/${lib.name}-gwt.jar"/>
-    <delete dir="${gwtjar.dir}"/>
   </target>
 
-  <!-- invoke the visualizer on itself for testing -->
-  <target name="sumtest" depends="compile">
+  <target name="sumtest" depends="compile" description="Invokes viztool on itself.">
     <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask"/>
     <viztool visualizer="com.samskivert.viztool.summary.SummaryVisualizer"
-      pkgroot="com.samskivert.viztool"
-      classes="com.samskivert.viztool.*">
+             pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*">
       <classpath refid="classpath"/>
     </viztool>
   </target>
 
-  <target name="hiertest" depends="compile">
+  <target name="hiertest" depends="compile" description="Invokes viztool on itself.">
     <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask"/>
     <viztool visualizer="com.samskivert.viztool.hierarchy.HierarchyVisualizer"
-      pkgroot="com.samskivert.viztool"
-      classes="com.samskivert.viztool.*"
-      output="hiertest.ps">
+             pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*"
+             output="hiertest.ps">
       <classpath refid="classpath"/>
     </viztool>
   </target>
-
 </project>

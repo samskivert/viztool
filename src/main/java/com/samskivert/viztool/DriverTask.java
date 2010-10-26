@@ -30,9 +30,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Destination;
 
 import java.io.File;
-import java.io.IOException;
 
-import java.net.URI;
 import java.util.ArrayList;
 
 import org.apache.tools.ant.AntClassLoader;
@@ -91,7 +89,7 @@ public class DriverTask extends Task
 
     public Path createClasspath ()
     {
-        return _cmdline.createClasspath(project).createPath();
+        return _cmdline.createClasspath(getProject()).createPath();
     }
 
     /**
@@ -114,7 +112,7 @@ public class DriverTask extends Task
         FontPicker.init(_output != null);
 
         // create the classloader we'll use to load the visualized classes
-        ClassLoader cl = new AntClassLoader(null, project, classpath, false);
+        ClassLoader cl = new AntClassLoader(null, getProject(), classpath, false);
 
         // scan the classpath and determine which classes will be
         // visualized
@@ -128,9 +126,9 @@ public class DriverTask extends Task
                                      ", exclude=" + _exclude + "].", e);
         }
 
-        ArrayList classes = new ArrayList();
+        ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
         while (fenum.hasNext()) {
-            String cname = (String)fenum.next();
+            String cname = fenum.next();
             // skip inner classes, the visualizations pick those up
             // themselves
             if (cname.indexOf("$") != -1) {

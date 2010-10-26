@@ -28,18 +28,18 @@ import com.samskivert.util.StringUtil;
  */
 public class Dumper
 {
-    public void dump (Class clazz)
+    public void dump (Class<?> clazz)
     {
         System.out.println("Dumping: " + clazz.getName());
 
-        Class parent = clazz.getSuperclass();
+        Class<?> parent = clazz.getSuperclass();
         if (parent == null) {
             System.out.println("P: none");
         } else {
             System.out.println("P: " + parent.getName());
         }
 
-        Class[] ifaces = clazz.getInterfaces();
+        Class<?>[] ifaces = clazz.getInterfaces();
         for (int i = 0; i < ifaces.length; i++) {
             System.out.println("I: " +  ifaces[i].getName());
         }

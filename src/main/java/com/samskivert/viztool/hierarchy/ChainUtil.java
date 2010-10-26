@@ -39,10 +39,10 @@ public class ChainUtil
      *
      * @return an array list containing all of the root chains.
      */
-    public static ArrayList buildChains (
-        String pkgroot, String pkg, Iterator iter)
+    public static ArrayList<Chain> buildChains (
+        String pkgroot, String pkg, Iterator<?> iter)
     {
-        ArrayList roots = new ArrayList();
+        ArrayList<Chain> roots = new ArrayList<Chain>();
         computeRoots(pkgroot, pkg, iter, roots);
         return roots;
     }
@@ -53,12 +53,12 @@ public class ChainUtil
      *
      * @return the matching chain or null if no chain could be found.
      */
-    public static Chain getChain (ArrayList roots, Class target)
+    public static Chain getChain (ArrayList<Chain> roots, Class<?> target)
     {
         // figure out which of our root chains (if any) contains the
         // specified class
         for (int i = 0; i < roots.size(); i++) {
-            Chain root = (Chain)roots.get(i);
+            Chain root = roots.get(i);
             Chain chain = root.getChain(target);
             if (chain != null) {
                 return chain;
@@ -72,7 +72,7 @@ public class ChainUtil
      * Dumps the classes in the supplied array list of chain instances to
      * stdout.
      */
-    public static void dumpClasses (PrintStream out, ArrayList roots)
+    public static void dumpClasses (PrintStream out, ArrayList<?> roots)
     {
         for (int i = 0; i < roots.size(); i++) {
             Chain root = (Chain)roots.get(i);
@@ -86,10 +86,10 @@ public class ChainUtil
      * constructs a hierarchical representation of those classes.
      */
     protected static void computeRoots (
-        String pkgroot, String pkg, Iterator iter, ArrayList roots)
+        String pkgroot, String pkg, Iterator<?> iter, ArrayList<Chain> roots)
     {
         while (iter.hasNext()) {
-            Class clazz = (Class)iter.next();
+            Class<?> clazz = (Class<?>)iter.next();
             String name = clazz.getName();
             // skip classes not in the package in question
             if (!name.startsWith(pkg) ||
@@ -105,10 +105,10 @@ public class ChainUtil
      * hierarchy based on its inheritance properties.
      */
     protected static void insertClass (
-        ArrayList roots, String pkgroot, Class target, boolean outpkg)
+        ArrayList<Chain> roots, String pkgroot, Class<?> target, boolean outpkg)
     {
         // insert the parent of this class into the hierarchy
-        Class parent = target.getSuperclass();
+        Class<?> parent = target.getSuperclass();
         String name = generateName(target, pkgroot, outpkg);
 
         // if we have no parent, we want to insert ourselves as a root
@@ -153,7 +153,7 @@ public class ChainUtil
         }
     }
 
-    protected static String generateName (Class target, String pkgroot,
+    protected static String generateName (Class<?> target, String pkgroot,
                                           boolean outpkg)
     {
         String name;
@@ -194,8 +194,8 @@ public class ChainUtil
         return (didx == -1) ? fqn : fqn.substring(didx+1);
     }
 
-    protected static boolean insertRoot (ArrayList roots, String name,
-                                         Class root, boolean inpkg)
+    protected static boolean insertRoot (ArrayList<Chain> roots, String name,
+                                         Class<?> root, boolean inpkg)
     {
         Chain chroot = new Chain(name, root, inpkg);
         // make sure no chain already exists for this root

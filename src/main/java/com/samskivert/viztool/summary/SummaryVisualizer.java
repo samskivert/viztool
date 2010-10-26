@@ -31,8 +31,6 @@ import java.awt.print.PrinterException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import com.samskivert.util.StringUtil;
-
 import com.samskivert.viztool.Log;
 import com.samskivert.viztool.Visualizer;
 import com.samskivert.viztool.layout.PackedColumnElementLayout;
@@ -48,15 +46,14 @@ public class SummaryVisualizer implements Visualizer
         _pkgroot = pkgroot;
     }
 
-    // documentation inherited
-    public void setClasses (Iterator iter)
+    public void setClasses (Iterator<Class<?>> iter)
     {
         // remove any old summaries
         _summaries.clear();
 
         // create the new summaries
         while (iter.hasNext()) {
-            _summaries.add(new ClassSummary((Class)iter.next(), this));
+            _summaries.add(new ClassSummary(iter.next(), this));
         }
     }
 
@@ -79,14 +76,14 @@ public class SummaryVisualizer implements Visualizer
     {
         // first layout all of our summaries (giving them dimensions)
         for (int i = 0; i < _summaries.size(); i++) {
-            ClassSummary sum = (ClassSummary)_summaries.get(i);
+            ClassSummary sum = _summaries.get(i);
             sum.layout(gfx);
         }
 
         // now arrange our summaries onto pages
-        _pages = new ArrayList();
-        ArrayList list = new ArrayList(_summaries);
-        ArrayList next = new ArrayList();
+        _pages = new ArrayList<ArrayList<ClassSummary>>();
+        ArrayList<ClassSummary> list = new ArrayList<ClassSummary>(_summaries);
+        ArrayList<ClassSummary> next = new ArrayList<ClassSummary>();
         PackedColumnElementLayout elay = new PackedColumnElementLayout();
         elay.setSortByHeight(false);
 
@@ -102,13 +99,13 @@ public class SummaryVisualizer implements Visualizer
 
             // move to the next page
             list = next;
-            next = new ArrayList();
+            next = new ArrayList<ClassSummary>();
         }
 
         // finally adjust all of the bounds of the class summaries by the
         // x and y offset of the page
         for (int i = 0; i < _summaries.size(); i++) {
-            ClassSummary sum = (ClassSummary)_summaries.get(i);
+            ClassSummary sum = _summaries.get(i);
             Rectangle2D b = sum.getBounds();
             sum.setBounds(b.getX()+x, b.getY()+y, b.getWidth(), b.getHeight());
         }
@@ -143,7 +140,7 @@ public class SummaryVisualizer implements Visualizer
         }
 
         // render the summaries on the requested page
-        ArrayList list = (ArrayList)_pages.get(pageIndex);
+        ArrayList<?> list = _pages.get(pageIndex);
         for (int i = 0; i < list.size(); i++) {
             ((ClassSummary)list.get(i)).render(gfx);
         }
@@ -172,7 +169,7 @@ public class SummaryVisualizer implements Visualizer
         gfx.setStroke(new BasicStroke(0.1f));
 
         // render the summaries on the requested page
-        ArrayList list = (ArrayList)_pages.get(pageIndex);
+        ArrayList<?> list = _pages.get(pageIndex);
         for (int i = 0; i < list.size(); i++) {
             ((ClassSummary)list.get(i)).render(gfx);
         }
@@ -193,7 +190,7 @@ public class SummaryVisualizer implements Visualizer
      * Cleans up a fully qualified class name according to our
      * configuration and the package root.
      */
-    public String name (Class clazz)
+    public String name (Class<?> clazz)
     {
         if (clazz.isArray()) {
             return name(clazz.getComponentType()) + "[]";
@@ -216,8 +213,8 @@ public class SummaryVisualizer implements Visualizer
     }
 
     protected String _pkgroot = "";
-    protected ArrayList _summaries = new ArrayList();
-    protected ArrayList _pages;
+    protected ArrayList<ClassSummary> _summaries = new ArrayList<ClassSummary>();
+    protected ArrayList<ArrayList<ClassSummary>> _pages;
     protected PageFormat _format;
     protected boolean _displayPackageNames = false;
 

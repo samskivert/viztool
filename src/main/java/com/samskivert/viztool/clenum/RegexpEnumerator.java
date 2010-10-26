@@ -29,7 +29,7 @@ import java.util.regex.PatternSyntaxException;
  */
 public class RegexpEnumerator extends FilterEnumerator
 {
-    public RegexpEnumerator (String regexp, String exregex, Iterator source)
+    public RegexpEnumerator (String regexp, String exregex, Iterator<String> source)
         throws PatternSyntaxException
     {
         super(source);

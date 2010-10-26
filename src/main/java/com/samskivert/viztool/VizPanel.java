@@ -110,5 +110,5 @@ public class VizPanel extends JPanel
 
     // our preferred size is one page at 72 pixels per inch
     protected static final int PAGE_WIDTH = (int)(72 * 8.5);
-    protected static final int PAGE_HEIGHT = (int)(72 * 11);
+    protected static final int PAGE_HEIGHT = (int)(72 * 11.0);
 }

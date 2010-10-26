@@ -117,7 +117,6 @@ public class RenderUtil
         double x, double y, String[] left, String[] right)
     {
         double maxleft = 0, maxwid = 0, starty = y;
-        double inset = 0;
 
         // first generate text layout instances and compute bounds for all
         // entries in both columns

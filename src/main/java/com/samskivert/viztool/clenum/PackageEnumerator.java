@@ -28,7 +28,7 @@ import java.util.Iterator;
  */
 public class PackageEnumerator extends FilterEnumerator
 {
-    public PackageEnumerator (String pkg, Iterator source, boolean subpkgs)
+    public PackageEnumerator (String pkg, Iterator<String> source, boolean subpkgs)
     {
         super(source);
         _package = pkg;

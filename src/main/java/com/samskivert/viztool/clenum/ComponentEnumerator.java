@@ -20,8 +20,6 @@
 
 package com.samskivert.viztool.clenum;
 
-import com.samskivert.util.StringUtil;
-
 /**
  * A component enumerator knows how to enumerate all of the classes in a
  * particular classpath component. Examples include a zip file enumerator,
@@ -70,7 +68,7 @@ public abstract class ComponentEnumerator
         // strip off the .class suffix
         path = path.substring(0, path.length() - CLASS_SUFFIX.length());
         // convert slashes to dots
-        return StringUtil.replace(path, "/", ".");
+        return path.replace("/", ".");
     }
 
     /**

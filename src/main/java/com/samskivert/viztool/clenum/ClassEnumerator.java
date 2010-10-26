@@ -33,7 +33,7 @@ import java.util.StringTokenizer;
  * The component enumerators are structured so that new enumerators can be
  * authored for new kinds of classpath component.
  */
-public class ClassEnumerator implements Iterator
+public class ClassEnumerator implements Iterator<String>
 {
     /**
      * Constructs a class enumerator with the supplied classpath. A set of
@@ -49,8 +49,8 @@ public class ClassEnumerator implements Iterator
         // decompose the path and select enumerators for each component
         StringTokenizer tok =
             new StringTokenizer(classpath, File.pathSeparator);
-        ArrayList warnings = new ArrayList();
-        ArrayList enums = new ArrayList();
+        ArrayList<Warning> warnings = new ArrayList<Warning>();
+        ArrayList<ComponentEnumerator> enums = new ArrayList<ComponentEnumerator>();
 
         while (tok.hasMoreTokens()) {
             String component = tok.nextToken();
@@ -98,7 +98,7 @@ public class ClassEnumerator implements Iterator
     {
         for (int i = 0; i < _enumerators.size(); i++) {
             ComponentEnumerator cenum =
-                (ComponentEnumerator)_enumerators.get(i);
+                _enumerators.get(i);
             if (cenum.matchesComponent(component)) {
                 return cenum;
             }
@@ -124,7 +124,7 @@ public class ClassEnumerator implements Iterator
         return (_nextClass != null);
     }
 
-    public Object next ()
+    public String next ()
     {
         String clazz = _nextClass;
         _nextClass = null;
@@ -198,7 +198,7 @@ public class ClassEnumerator implements Iterator
         }
     }
 
-    protected static ArrayList _enumerators = new ArrayList();
+    protected static ArrayList<ComponentEnumerator> _enumerators = new ArrayList<ComponentEnumerator>();
 
     static {
         // register our enumerators

@@ -39,6 +39,6 @@ public interface ElementLayout
      * @return the bounding dimensions of the collection of elements that
      * were laid out.
      */
-    public Rectangle2D layout (List elements, double pageWidth,
-                               double pageHeight, List overflow);
+    public <E extends Element> Rectangle2D layout (
+        List<E> elements, double pageWidth, double pageHeight, List<E> overflow);
 }

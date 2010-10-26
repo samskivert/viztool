@@ -25,12 +25,9 @@ import java.awt.geom.Rectangle2D;
 import java.awt.print.*;
 import java.util.*;
 
-import com.samskivert.util.Comparators;
 import com.samskivert.util.CollectionUtil;
 
-import com.samskivert.viztool.Log;
 import com.samskivert.viztool.Visualizer;
-import com.samskivert.viztool.clenum.PackageEnumerator;
 
 /**
  * The hierarchy visualizer displays inheritance hierarchies in a compact
@@ -46,31 +43,31 @@ public class HierarchyVisualizer implements Visualizer
     }
 
     // documentation inherited
-    public void setClasses (Iterator iter)
+    public void setClasses (Iterator<Class<?>> iter)
     {
         // dump all the classes into an array list so that we can
         // repeatedly scan through the list
         CollectionUtil.addAll(_classes, iter);
 
         // compile a list of all packages in our collection
-        HashSet pkgset = new HashSet();
-        iter = _classes.iterator();
-        while (iter.hasNext()) {
-            Class cl = (Class)iter.next();
+        HashSet<String> pkgset = new HashSet<String>();
+        Iterator<Class<?>> citer = _classes.iterator();
+        while (citer.hasNext()) {
+            Class<?> cl = (Class<?>)citer.next();
             pkgset.add(ChainUtil.pkgFromClass(cl.getName()));
         }
 
         // sort our package names
         _packages = new String[pkgset.size()];
-        iter = pkgset.iterator();
-        for (int i = 0; iter.hasNext(); i++) {
-            _packages[i] = (String)iter.next();
+        Iterator<String> piter = pkgset.iterator();
+        for (int i = 0; piter.hasNext(); i++) {
+            _packages[i] = piter.next();
         }
         Arrays.sort(_packages);
         // System.err.println("Scanned " + _packages.length + " packages.");
 
         // now create chain groups for each package
-        _groups = new ArrayList();
+        _groups = new ArrayList<ChainGroup>();
         for (int i = 0; i < _packages.length; i++) {
             _groups.add(new ChainGroup(_pkgroot, _packages[i],
                                        _classes.iterator()));
@@ -102,7 +99,7 @@ public class HierarchyVisualizer implements Visualizer
         // render the groups on the requested page
         int rendered = 0;
         for (int i = 0; i < _groups.size(); i++) {
-            ChainGroup group = (ChainGroup)_groups.get(i);
+            ChainGroup group = _groups.get(i);
 
             // skip groups not on this page
             if (group.getPage() != pageIndex) {
@@ -125,7 +122,7 @@ public class HierarchyVisualizer implements Visualizer
 
         // lay out our groups
         for (int i = 0; i < _groups.size(); i++) {
-            ChainGroup group = (ChainGroup)_groups.get(i);
+            ChainGroup group = _groups.get(i);
 
             // lay out the group in question
             ChainGroup ngrp = group.layout(gfx, width, height);
@@ -159,7 +156,7 @@ public class HierarchyVisualizer implements Visualizer
     {
         // render the groups on the requested page
         for (int i = 0; i < _groups.size(); i++) {
-            ChainGroup group = (ChainGroup)_groups.get(i);
+            ChainGroup group = _groups.get(i);
 
             // skip groups not on this page
             if (group.getPage() != pageIndex) {
@@ -167,7 +164,7 @@ public class HierarchyVisualizer implements Visualizer
             }
 
             Rectangle2D bounds = group.getBounds();
-            group.render((Graphics2D)gfx, bounds.getX(), bounds.getY());
+            group.render(gfx, bounds.getX(), bounds.getY());
         }
     }
 
@@ -183,10 +180,10 @@ public class HierarchyVisualizer implements Visualizer
     }
 
     protected String _pkgroot;
-    protected ArrayList _classes = new ArrayList();
+    protected ArrayList<Class<?>> _classes = new ArrayList<Class<?>>();
 
     protected String[] _packages;
-    protected ArrayList _groups;
+    protected ArrayList<ChainGroup> _groups;
     protected int _pageCount = -1;
 
     protected PageFormat _format;

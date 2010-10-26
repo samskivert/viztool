@@ -20,14 +20,12 @@
 
 package com.samskivert.viztool;
 
-import java.awt.*;
 import java.awt.print.*;
 import java.util.ArrayList;
 
 import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.viztool.clenum.*;
 
-import com.samskivert.viztool.hierarchy.HierarchyVisualizer;
 import com.samskivert.viztool.summary.SummaryVisualizer;
 import com.samskivert.viztool.util.FontPicker;
 
@@ -80,9 +78,9 @@ public class Driver
             System.exit(-1);
         }
 
-        ArrayList classes = new ArrayList();
+        ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
         while (fenum.hasNext()) {
-            String cname = (String)fenum.next();
+            String cname = fenum.next();
             // skip inner classes, the visualizations pick those up
             // themselves
             if (cname.indexOf("$") != -1) {
