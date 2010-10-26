@@ -4,12 +4,12 @@
   <groupId>com.samskivert</groupId>
   <artifactId>viztool</artifactId>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.2-SNAPSHOT</version>
   <name>viztool</name>
-  <description>A collection of Java utilities.</description>
-  <url>http://code.google.com/p/samskivert/</url>
+  <description>A tool for generating visualizations of collections of Java classes.</description>
+  <url>http://samskivert.com/code/viztool/</url>
   <issueManagement>
-    <url>http://code.google.com/p/samskivert/issues/list</url>
+    <url>http://github.com/samskivert/viztool/issues</url>
   </issueManagement>
 
   <parent>
@@ -35,9 +35,9 @@
   </developers>
 
   <scm>
-    <connection>scm:svn:svn://samskivert.com/viztool/trunk</connection>
-    <developerConnection>scm:svn:svn+ssh://samskivert.com/export/svn/viztool/trunk</developerConnection>
-    <url>svn://samskivert.com/viztool/trunk</url>
+    <connection>scm:git:git://github.com/samskivert/viztool.git</connection>
+    <developerConnection>scm:git:git@github.com:samskivert/viztool.git</developerConnection>
+    <url>http://github.com/samskivert/viztool</url>
   </scm>
 
   <dependencies>
