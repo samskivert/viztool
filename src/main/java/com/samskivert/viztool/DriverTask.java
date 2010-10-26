@@ -32,6 +32,7 @@ import javax.print.attribute.standard.Destination;
 import java.io.File;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.tools.ant.AntClassLoader;
 import org.apache.tools.ant.BuildException;
@@ -98,12 +99,9 @@ public class DriverTask extends Task
     public void execute () throws BuildException
     {
         // make sure everything was set up properly
-        ensureSet(_vizclass, "Must specify the visualizer class " +
-                  "via the 'visualizer' attribute.");
-        ensureSet(_pkgroot, "Must specify the package root " +
-                  "via the 'pkgroot' attribute.");
-        ensureSet(_pkgroot, "Must specify the class regular expression " +
-                  "via the 'classes' attribute.");
+        ensureSet(_vizclass, "Must specify the visualizer class via the 'visualizer' attribute.");
+        ensureSet(_pkgroot, "Must specify the package root via the 'pkgroot' attribute.");
+        ensureSet(_pkgroot, "Must specify the class regexp via the 'classes' attribute.");
         Path classpath = _cmdline.getClasspath();
         ensureSet(classpath, "Must provide a <classpath> subelement " +
                   "describing the classpath to be searched for classes.");
@@ -114,19 +112,17 @@ public class DriverTask extends Task
         // create the classloader we'll use to load the visualized classes
         ClassLoader cl = new AntClassLoader(null, getProject(), classpath, false);
 
-        // scan the classpath and determine which classes will be
-        // visualized
+        // scan the classpath and determine which classes will be visualized
         ClassEnumerator clenum = new ClassEnumerator(classpath.toString());
         FilterEnumerator fenum = null;
         try {
             fenum = new RegexpEnumerator(_classes, _exclude, clenum);
         } catch  (Exception e) {
-            throw new BuildException("Invalid package regular expression " +
-                                     "[classes=" + _classes +
+            throw new BuildException("Invalid package regular expression [classes=" + _classes +
                                      ", exclude=" + _exclude + "].", e);
         }
 
-        ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classes = new ArrayList<Class<?>>();
         while (fenum.hasNext()) {
             String cname = fenum.next();
             // skip inner classes, the visualizations pick those up
@@ -156,9 +152,7 @@ public class DriverTask extends Task
         try {
             viz = (Visualizer)Class.forName(_vizclass).newInstance();
         } catch (Throwable t) {
-            throw new BuildException("Unable to instantiate visualizer " +
-                                     "[vizclass=" + _vizclass +
-                                     ", error=" + t + "].");
+            throw new BuildException("Unable to instantiate visualizer: " + _vizclass, t);
         }
 
         viz.setPackageRoot(_pkgroot);

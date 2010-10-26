@@ -20,7 +20,7 @@
 
 package com.samskivert.viztool.hierarchy;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 import java.awt.geom.Rectangle2D;
 import java.awt.font.TextLayout;
@@ -37,11 +37,10 @@ import com.samskivert.viztool.util.FontPicker;
 public class ChainGroup
 {
     /**
-     * Constructs a chain group for a particular package with the
-     * specified package root and an iterator that is configured only to
-     * return classes from the specified package.
+     * Constructs a chain group for a particular package with the specified package root and an
+     * iterator that is configured only to return classes from the specified package.
      */
-    public ChainGroup (String pkgroot, String pkg, Iterator<?> iter)
+    public ChainGroup (String pkgroot, String pkg, Iterator<Class<?>> iter)
     {
         // keep track of the package
         _pkg = pkg;
@@ -49,16 +48,15 @@ public class ChainGroup
         // process the classes provided by our enumerator
         _roots = ChainUtil.buildChains(pkgroot, pkg, iter);
 
-        // sort our roots
-        for (int i = 0; i < _roots.size(); i++) {
-            Chain root = _roots.get(i);
+        // sort our roots' children
+        for (Chain root : _roots) {
             root.sortChildren(NAME_COMP);
         }
 
         // System.err.println(_roots.size() + " chains for " + pkg + ".");
     }
 
-    protected ChainGroup (String pkg, ArrayList<Chain> roots)
+    protected ChainGroup (String pkg, List<Chain> roots)
     {
         _pkg = pkg;
         _roots = roots;
@@ -107,8 +105,7 @@ public class ChainGroup
      * will be returned. If the group fits in the allotted space, null
      * will be returned.
      */
-    public ChainGroup layout (
-        Graphics2D gfx, double pageWidth, double pageHeight)
+    public ChainGroup layout (Graphics2D gfx, double pageWidth, double pageHeight)
     {
         // we'll need room to incorporate our title
         TextLayout layout = new TextLayout(_pkg, FontPicker.getTitleFont(),
@@ -137,7 +134,7 @@ public class ChainGroup
 
         // arrange them on the page
         ElementLayout elay = new PackedColumnElementLayout();
-        ArrayList<Chain> overflow = new ArrayList<Chain>();
+        List<Chain> overflow = new ArrayList<Chain>();
         _size = elay.layout(_roots, pageWidth, pageHeight, overflow);
 
         // make sure we're wide enough for our title
@@ -152,8 +149,8 @@ public class ChainGroup
         // way
         if (overflow.size() > 0) {
             // remove the overflow roots from our list
-            for (int i = 0; i < overflow.size(); i++) {
-                _roots.remove(overflow.get(i));
+            for (Chain oflow : overflow) {
+                _roots.remove(oflow);
             }
             return new ChainGroup(_pkg, overflow);
         }
@@ -192,8 +189,7 @@ public class ChainGroup
 
         // render our chains
         ChainVisualizer renderer = new CascadingChainVisualizer();
-        for (int i = 0; i < _roots.size(); i++) {
-            Chain chain = _roots.get(i);
+        for (Chain chain : _roots) {
             renderer.renderChain(chain, gfx);
         }
 
@@ -225,7 +221,7 @@ public class ChainGroup
     }
 
     protected String _pkg;
-    protected ArrayList<Chain> _roots;
+    protected List<Chain> _roots;
 
     protected Rectangle2D _size;
     protected int _page;

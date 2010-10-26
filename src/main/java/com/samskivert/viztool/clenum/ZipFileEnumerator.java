@@ -88,16 +88,14 @@ public class ZipFileEnumerator extends ComponentEnumerator
 
     protected void scanToNextClass ()
     {
-        // if we've already scanned to the end of our zipfile, we can bail
-        // immediately
+        // if we've already scanned to the end of our zipfile, we can bail immediately
         if (_zipfile == null) {
             return;
         }
 
-        // otherwise scan through the zip contents for the next thing that
-        // looks like a class
+        // otherwise scan through the zip contents for the next thing that looks like a class
         while (_entenum.hasMoreElements()) {
-            ZipEntry entry = (ZipEntry)_entenum.nextElement();
+            ZipEntry entry = _entenum.nextElement();
             String nextClass = entry.getName();
             if (nextClass.endsWith(CLASS_SUFFIX)) {
                 _nextClass = pathToClassName(nextClass);
@@ -105,8 +103,7 @@ public class ZipFileEnumerator extends ComponentEnumerator
             }
         }
 
-        // if we've reached the end of the zip file, we want to close
-        // things up
+        // if we've reached the end of the zip file, we want to close things up
         if (_zipfile != null && _nextClass == null) {
             try {
                 _zipfile.close();

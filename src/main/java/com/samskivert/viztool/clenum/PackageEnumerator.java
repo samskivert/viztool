@@ -50,16 +50,13 @@ public class PackageEnumerator extends FilterEnumerator
         // run ourselves on the classpath
         String classpath = System.getProperty("java.class.path");
         ClassEnumerator clenum = new ClassEnumerator(classpath);
-        String pkg = "com.samskivert.viztool.clenum";
-        PackageEnumerator penum = new PackageEnumerator(pkg, clenum, true);
-
-        // print out the warnings
-        ClassEnumerator.Warning[] warnings = clenum.getWarnings();
-        for (int i = 0; i < warnings.length; i++) {
-            System.out.println("Warning: " + warnings[i].reason);
+        for (String warning : clenum.getWarnings()) {
+            System.out.println("Warning: " + warning);
         }
 
         // enumerate over whatever classes match our package
+        String pkg = "com.samskivert.viztool.clenum";
+        PackageEnumerator penum = new PackageEnumerator(pkg, clenum, true);
         while (penum.hasNext()) {
             System.out.println("Class: " + penum.next());
         }

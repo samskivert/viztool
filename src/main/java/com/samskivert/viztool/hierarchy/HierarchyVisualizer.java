@@ -20,7 +20,9 @@
 
 package com.samskivert.viztool.hierarchy;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics2D;
+import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.print.*;
 import java.util.*;
@@ -45,38 +47,30 @@ public class HierarchyVisualizer implements Visualizer
     // documentation inherited
     public void setClasses (Iterator<Class<?>> iter)
     {
-        // dump all the classes into an array list so that we can
-        // repeatedly scan through the list
+        // dump all the classes into an array list so that we can repeatedly scan through the list
         CollectionUtil.addAll(_classes, iter);
 
         // compile a list of all packages in our collection
-        HashSet<String> pkgset = new HashSet<String>();
-        Iterator<Class<?>> citer = _classes.iterator();
-        while (citer.hasNext()) {
-            Class<?> cl = (Class<?>)citer.next();
+        Set<String> pkgset = new HashSet<String>();
+        for (Class<?> cl : _classes) {
             pkgset.add(ChainUtil.pkgFromClass(cl.getName()));
         }
 
         // sort our package names
-        _packages = new String[pkgset.size()];
-        Iterator<String> piter = pkgset.iterator();
-        for (int i = 0; piter.hasNext(); i++) {
-            _packages[i] = piter.next();
-        }
+        pkgset.toArray(_packages = new String[pkgset.size()]);
         Arrays.sort(_packages);
         // System.err.println("Scanned " + _packages.length + " packages.");
 
         // now create chain groups for each package
         _groups = new ArrayList<ChainGroup>();
-        for (int i = 0; i < _packages.length; i++) {
-            _groups.add(new ChainGroup(_pkgroot, _packages[i],
-                                       _classes.iterator()));
+        for (String pkg : _packages) {
+            _groups.add(new ChainGroup(_pkgroot, pkg, _classes.iterator()));
         }
     }
 
     /**
-     * Lays out and renders each of the chain groups that make up this
-     * package hierarchy visualization.
+     * Lays out and renders each of the chain groups that make up this package hierarchy
+     * visualization.
      */
     public int print (Graphics g, PageFormat pf, int pageIndex)
         throws PrinterException
@@ -98,14 +92,10 @@ public class HierarchyVisualizer implements Visualizer
 
         // render the groups on the requested page
         int rendered = 0;
-        for (int i = 0; i < _groups.size(); i++) {
-            ChainGroup group = _groups.get(i);
-
-            // skip groups not on this page
+        for (ChainGroup group : _groups) {
             if (group.getPage() != pageIndex) {
-                continue;
+                continue; // skip groups not on this page
             }
-
             Rectangle2D bounds = group.getBounds();
             group.render(gfx, bounds.getX(), bounds.getY());
             rendered++;
@@ -114,22 +104,20 @@ public class HierarchyVisualizer implements Visualizer
         return (rendered > 0) ? PAGE_EXISTS : NO_SUCH_PAGE;
     }
 
-    public void layout (Graphics2D gfx, double x, double y,
-                        double width, double height)
+    public void layout (Graphics2D gfx, double x, double y, double width, double height)
     {
         double starty = y;
         int pageno = 0;
 
         // lay out our groups
-        for (int i = 0; i < _groups.size(); i++) {
-            ChainGroup group = _groups.get(i);
-
+        for (int ii = 0; ii < _groups.size(); ii++) {
+            ChainGroup group = _groups.get(ii);
             // lay out the group in question
             ChainGroup ngrp = group.layout(gfx, width, height);
-            // if the process of laying this group out caused it to become
-            // split across pages, insert this new group into the list
+            // if the process of laying this group out caused it to become split across pages,
+            // insert this new group into the list
             if (ngrp != null) {
-                _groups.add(i+1, ngrp);
+                _groups.add(ii+1, ngrp);
             }
 
             // determine if we need to skip to the next page or not
@@ -155,22 +143,18 @@ public class HierarchyVisualizer implements Visualizer
     public void paint (Graphics2D gfx, int pageIndex)
     {
         // render the groups on the requested page
-        for (int i = 0; i < _groups.size(); i++) {
-            ChainGroup group = _groups.get(i);
-
-            // skip groups not on this page
+        for (ChainGroup group : _groups) {
             if (group.getPage() != pageIndex) {
-                continue;
+                continue; // skip groups not on this page
             }
-
             Rectangle2D bounds = group.getBounds();
             group.render(gfx, bounds.getX(), bounds.getY());
         }
     }
 
     /**
-     * Returns the number of pages occupied by this visualization. This is
-     * only valid after a call to {@link #layout}.
+     * Returns the number of pages occupied by this visualization. This is only valid after a call
+     * to {@link #layout}.
      *
      * @return the page count or -1 if we've not yet been laid out.
      */
@@ -180,10 +164,10 @@ public class HierarchyVisualizer implements Visualizer
     }
 
     protected String _pkgroot;
-    protected ArrayList<Class<?>> _classes = new ArrayList<Class<?>>();
+    protected List<Class<?>> _classes = new ArrayList<Class<?>>();
 
     protected String[] _packages;
-    protected ArrayList<ChainGroup> _groups;
+    protected List<ChainGroup> _groups;
     protected int _pageCount = -1;
 
     protected PageFormat _format;

@@ -22,6 +22,7 @@ package com.samskivert.viztool;
 
 import java.awt.print.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.samskivert.swing.util.SwingUtil;
 import com.samskivert.viztool.clenum.*;
@@ -60,9 +61,8 @@ public class Driver
         ClassEnumerator clenum = new ClassEnumerator(classpath);
 
         // print out the warnings
-        ClassEnumerator.Warning[] warnings = clenum.getWarnings();
-        for (int i = 0; i < warnings.length; i++) {
-            System.err.println("Warning: " + warnings[i].reason);
+        for (String warning : clenum.getWarnings()) {
+            System.err.println("Warning: " + warning);
         }
 
         // initialize the font picker
@@ -78,7 +78,7 @@ public class Driver
             System.exit(-1);
         }
 
-        ArrayList<Class<?>> classes = new ArrayList<Class<?>>();
+        List<Class<?>> classes = new ArrayList<Class<?>>();
         while (fenum.hasNext()) {
             String cname = fenum.next();
             // skip inner classes, the visualizations pick those up

@@ -21,8 +21,7 @@
 package com.samskivert.viztool.clenum;
 
 /**
- * The jar file enumerator enumerates all of the classes in a .jar class
- * archive.
+ * The jar file enumerator enumerates all of the classes in a .jar class archive.
  */
 public class JarFileEnumerator extends ZipFileEnumerator
 {
@@ -34,8 +33,7 @@ public class JarFileEnumerator extends ZipFileEnumerator
     }
 
     /**
-     * Constructs a jar file enumerator with the specified jar file for
-     * enumeration.
+     * Constructs a jar file enumerator with the specified jar file for enumeration.
      */
     public JarFileEnumerator (String jarpath)
         throws EnumerationException

@@ -22,12 +22,12 @@ package com.samskivert.viztool.clenum;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.samskivert.viztool.Log;
 
 /**
- * The directory enumerator enumerates all of the classes in a directory
- * hierarchy.
+ * The directory enumerator enumerates all of the classes in a directory hierarchy.
  */
 public class DirectoryEnumerator extends ComponentEnumerator
 {
@@ -50,8 +50,7 @@ public class DirectoryEnumerator extends ComponentEnumerator
 
         // make sure the specified component exists
         if (!_root.exists()) {
-            String msg = "Can't enumerate '" + dirpath +
-                "': directory doesn't exist";
+            String msg = "Can't enumerate '" + dirpath + "': directory doesn't exist";
             throw new EnumerationException(msg);
         }
 
@@ -71,8 +70,8 @@ public class DirectoryEnumerator extends ComponentEnumerator
     // documentation inherited from interface
     public boolean matchesComponent (String component)
     {
-        // the directory enumerator picks up anything that falls through
-        // the zip or jar file enumerators
+        // the directory enumerator picks up anything that falls through the zip or jar file
+        // enumerators
         return true;
     }
 
@@ -108,15 +107,14 @@ public class DirectoryEnumerator extends ComponentEnumerator
             // grab the file related to our current position
             File target = rec.kids[rec.kidpos];
 
-            // bump up the kidpos so that things are in place for the next
-            // iteration; if we just grabbed the last kid, pop this record
-            // off of the stack
+            // bump up the kidpos so that things are in place for the next iteration; if we just
+            // grabbed the last kid, pop this record off of the stack
             if (++rec.kidpos >= rec.kids.length) {
                 _drecords.remove(_drecords.size()-1);
             }
 
-            // if our target file is a directory, push another drecord
-            // onto the stack and recurse into it
+            // if our target file is a directory, push another drecord onto the stack and recurse
+            // into it
             if (target.isDirectory()) {
                 addDirectory(target);
                 continue;
@@ -139,9 +137,8 @@ public class DirectoryEnumerator extends ComponentEnumerator
                 return;
             }
 
-            // if we didn't match, we loop back through and process the
-            // next kid (potentially popping back up the directory record
-            // stack in the process)
+            // if we didn't match, we loop back through and process the next kid (potentially
+            // popping back up the directory record stack in the process)
         }
     }
 
@@ -175,6 +172,6 @@ public class DirectoryEnumerator extends ComponentEnumerator
 
     protected File _root;
     protected String _rootpath;
-    protected ArrayList<DirRecord> _drecords = new ArrayList<DirRecord>();
+    protected List<DirRecord> _drecords = new ArrayList<DirRecord>();
     protected String _nextClass;
 }

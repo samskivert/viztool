@@ -23,6 +23,7 @@ package com.samskivert.viztool.clenum;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -36,43 +37,33 @@ import java.util.StringTokenizer;
 public class ClassEnumerator implements Iterator<String>
 {
     /**
-     * Constructs a class enumerator with the supplied classpath. A set of
-     * component enumerators will be chosen for each element and warnings
-     * will be generated for components that cannot be processed for some
-     * reason or other. Those will be available following the completion
-     * of the constructor via <code>getWarnings()</code>.
-     *
-     * @see #getWarnings
+     * Constructs a class enumerator with the supplied classpath. A set of component enumerators
+     * will be chosen for each element and warnings will be generated for components that cannot be
+     * processed for some reason or other. Those will be available following the completion of the
+     * constructor via {@link #getWarnings}.
      */
     public ClassEnumerator (String classpath)
     {
         // decompose the path and select enumerators for each component
-        StringTokenizer tok =
-            new StringTokenizer(classpath, File.pathSeparator);
-        ArrayList<Warning> warnings = new ArrayList<Warning>();
-        ArrayList<ComponentEnumerator> enums = new ArrayList<ComponentEnumerator>();
+        List<ComponentEnumerator> enums = new ArrayList<ComponentEnumerator>();
 
+        StringTokenizer tok = new StringTokenizer(classpath, File.pathSeparator);
         while (tok.hasMoreTokens()) {
             String component = tok.nextToken();
             // locate an enumerator for this token
             ComponentEnumerator cenum = matchEnumerator(component);
             if (cenum == null) {
-                String wmsg = "Unable to match enumerator for " +
-                    "component '" + component + "'.";
-                warnings.add(new Warning(wmsg));
+                String wmsg = "Unable to match enumerator for component '" + component + "'.";
+                _warnings.add(wmsg);
 
             } else {
                 try {
-//                      System.out.println("Adding [enum=" + cenum +
-//                                         ", component=" + component + "].");
-                    // construct an enumerator to enumerate this component
-                    // and put it on our list
+                    // construct an enumerator to enumerate this component and put it on our list
                     enums.add(cenum.enumerate(component));
-
                 } catch (EnumerationException ee) {
-                    // if there was a problem creating an enumerator for
-                    // said component, create a warning to that effect
-                    warnings.add(new Warning(ee.getMessage()));
+                    // if there was a problem creating an enumerator for said component, create a
+                    // warning to that effect
+                    _warnings.add(ee.getMessage());
                 }
             }
         }
@@ -81,49 +72,42 @@ public class ClassEnumerator implements Iterator<String>
         _enums = new ComponentEnumerator[enums.size()];
         enums.toArray(_enums);
 
-        // convert the warnings into an array
-        _warnings = new Warning[warnings.size()];
-        warnings.toArray(_warnings);
-
         // scan to the first class
         scanToNextClass();
     }
 
     /**
-     * Locates an enumerator that matches the specified component and
-     * returns the prototype instance of that enumerator. Returns null if
-     * no enumerator could be matched.
+     * Locates an enumerator that matches the specified component and returns the prototype
+     * instance of that enumerator. Returns null if no enumerator could be matched.
      */
     protected ComponentEnumerator matchEnumerator (String component)
     {
-        for (int i = 0; i < _enumerators.size(); i++) {
-            ComponentEnumerator cenum =
-                _enumerators.get(i);
+        for (ComponentEnumerator cenum : _enumerators) {
             if (cenum.matchesComponent(component)) {
                 return cenum;
             }
         }
-
         return null;
     }
 
     /**
-     * Returns the warnings generated in parsing the classpath and
-     * constructing enumerators for each component. For example, if a
-     * classpath component specified a directory that was non-existent or
-     * inaccessible, a warning would be generated for that component. If
-     * no warnings were generated, a zero length array will be returned.
+     * Returns the warnings generated in parsing the classpath and constructing enumerators for
+     * each component. For example, if a classpath component specified a directory that was
+     * non-existent or inaccessible, a warning would be generated for that component. If no
+     * warnings were generated, a zero length array will be returned.
      */
-    public Warning[] getWarnings ()
+    public Iterable<String> getWarnings ()
     {
         return _warnings;
     }
 
+    // from interface Iterator<String>
     public boolean hasNext ()
     {
         return (_nextClass != null);
     }
 
+    // from interface Iterator<String>
     public String next ()
     {
         String clazz = _nextClass;
@@ -132,14 +116,15 @@ public class ClassEnumerator implements Iterator<String>
         return clazz;
     }
 
+    // from interface Iterator<String>
     public void remove ()
     {
         // not supported
     }
 
     /**
-     * Queues up the next enumerator in the list or clears out our
-     * enumerator reference if we have no remaining enumerators.
+     * Queues up the next enumerator in the list or clears out our enumerator reference if we have
+     * no remaining enumerators.
      */
     protected void scanToNextClass ()
     {
@@ -164,11 +149,11 @@ public class ClassEnumerator implements Iterator<String>
     protected ComponentEnumerator[] _enums;
     protected int _enumidx;
     protected String _nextClass;
-    protected Warning[] _warnings;
+    protected List<String> _warnings = new ArrayList<String>();
 
     /**
-     * A warning is generated when a component of the classpath cannot be
-     * processed for some reason or other.
+     * A warning is generated when a component of the classpath cannot be processed for some reason
+     * or other.
      */
     public static class Warning
     {
@@ -187,9 +172,8 @@ public class ClassEnumerator implements Iterator<String>
         ClassEnumerator cenum = new ClassEnumerator(classpath);
 
         // print out the warnings
-        Warning[] warnings = cenum.getWarnings();
-        for (int i = 0; i < warnings.length; i++) {
-            System.out.println("Warning: " + warnings[i].reason);
+        for (String warning : cenum.getWarnings()) {
+            System.out.println("Warning: " + warning);
         }
 
         // enumerate over whatever classes we can
@@ -198,15 +182,13 @@ public class ClassEnumerator implements Iterator<String>
         }
     }
 
-    protected static ArrayList<ComponentEnumerator> _enumerators = new ArrayList<ComponentEnumerator>();
-
+    protected static List<ComponentEnumerator> _enumerators = new ArrayList<ComponentEnumerator>();
     static {
         // register our enumerators
         _enumerators.add(new ZipFileEnumerator());
         _enumerators.add(new JarFileEnumerator());
-        // the directory enumerator should always be last in the list
-        // because it picks up all stragglers and tries enumerating them
-        // as if they were directories
+        // the directory enumerator should always be last in the list because it picks up all
+        // stragglers and tries enumerating them as if they were directories
         _enumerators.add(new DirectoryEnumerator());
     }
 }
