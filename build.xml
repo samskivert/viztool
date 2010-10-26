@@ -66,20 +66,28 @@
     <jar destfile="${deploy.dir}/${lib.name}.jar" basedir="${classes.dir}"/>
   </target>
 
-  <target name="sumtest" depends="compile" description="Invokes viztool on itself.">
-    <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask"/>
+  <target name="-init-viztool" depends="compile">
+    <path id="test.classpath">
+      <path refid="classpath"/>
+      <pathelement path="${classes.dir}"/>
+    </path>
+    <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask">
+      <classpath refid="test.classpath"/>
+    </taskdef>
+  </target>
+
+  <target name="sumtest" depends="-init-viztool" description="Invokes viztool on itself.">
     <viztool visualizer="com.samskivert.viztool.summary.SummaryVisualizer"
              pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*">
-      <classpath refid="classpath"/>
+      <classpath refid="test.classpath"/>
     </viztool>
   </target>
 
-  <target name="hiertest" depends="compile" description="Invokes viztool on itself.">
-    <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask"/>
+  <target name="hiertest" depends="-init-viztool" description="Invokes viztool on itself.">
     <viztool visualizer="com.samskivert.viztool.hierarchy.HierarchyVisualizer"
              pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*"
              output="hiertest.ps">
-      <classpath refid="classpath"/>
+      <classpath refid="test.classpath"/>
     </viztool>
   </target>
 </project>
