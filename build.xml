@@ -64,8 +64,7 @@
 
   <target name="hiertest" depends="-init-viztool" description="Invokes viztool on itself.">
     <viztool visualizer="com.samskivert.viztool.hierarchy.HierarchyVisualizer"
-             pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*"
-             output="hiertest.ps">
+             pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*">
       <classpath refid="test.classpath"/>
     </viztool>
   </target>
