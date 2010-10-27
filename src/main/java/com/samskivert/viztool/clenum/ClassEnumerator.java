@@ -40,7 +40,7 @@ public class ClassEnumerator implements Iterator<String>
      * Constructs a class enumerator with the supplied classpath. A set of component enumerators
      * will be chosen for each element and warnings will be generated for components that cannot be
      * processed for some reason or other. Those will be available following the completion of the
-     * constructor via {@link #getWarnings}.
+     * constructor via {@link #getWarningStrings}.
      */
     public ClassEnumerator (String classpath)
     {
@@ -96,9 +96,27 @@ public class ClassEnumerator implements Iterator<String>
      * non-existent or inaccessible, a warning would be generated for that component. If no
      * warnings were generated, a zero length array will be returned.
      */
-    public Iterable<String> getWarnings ()
+    public Iterable<String> getWarningStrings ()
     {
         return _warnings;
+    }
+
+    /** Used by {@link #getWarnings}. Deprecated. */
+    public class Warning {
+        public final String reason;
+        public Warning (String reason) {
+            this.reason = reason;
+        }
+    }
+
+    @Deprecated
+    public Warning[] getWarnings ()
+    {
+        Warning[] warnings = new Warning[_warnings.size()];
+        for (int ii = 0, ll = _warnings.size(); ii < ll; ii++) {
+            warnings[ii] = new Warning(_warnings.get(ii));
+        }
+        return warnings;
     }
 
     // from interface Iterator<String>

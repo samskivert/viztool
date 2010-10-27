@@ -50,7 +50,7 @@ public class PackageEnumerator extends FilterEnumerator
         // run ourselves on the classpath
         String classpath = System.getProperty("java.class.path");
         ClassEnumerator clenum = new ClassEnumerator(classpath);
-        for (String warning : clenum.getWarnings()) {
+        for (String warning : clenum.getWarningStrings()) {
             System.out.println("Warning: " + warning);
         }
 

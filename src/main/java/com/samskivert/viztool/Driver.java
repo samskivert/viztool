@@ -61,7 +61,7 @@ public class Driver
         ClassEnumerator clenum = new ClassEnumerator(classpath);
 
         // print out the warnings
-        for (String warning : clenum.getWarnings()) {
+        for (String warning : clenum.getWarningStrings()) {
             System.err.println("Warning: " + warning);
         }
 
