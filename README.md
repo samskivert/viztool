@@ -34,16 +34,29 @@ Using viztool
 viztool is designed to be easily invoked from Ant. Add a task like the
 following to your build.xml file:
 
+    <!-- using the Maven Ant task -->
+    <target name="hierviz">
+      <artifact:dependencies pathId="viztool.classpath">
+        <dependency groupId="com.samskivert" artifactId="viztool" version="1.2"/>
+      </artifact:dependencies>
+      <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask"
+               classpathref="viztool.classpath"/>
+      <viztool pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*"
+               visualizer="com.samskivert.viztool.hierarchy.HierarchyVisualizer">
+        <classpath refid="your_classpath"/>
+      </viztool>
+    </target>
+
+    <!-- using manual dependnecies -->
     <target name="hierviz">
       <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask">
         <classpath>
-          <!-- include viztool.jar and samskivert.jar; or use the Maven Ant task
-               to obtain viztool and its dependencies automatically -->
+          <fileset dir="somewhere" include="viztool*.jar"/>
+          <fileset dir="somewhere" include="samskivert*.jar"/>
         </classpath>
       </taskdef>
-      <viztool pkgroot="com.samskivert.viztool"
-        classes="com.samskivert.viztool.*"
-        visualizer="com.samskivert.viztool.hierarchy.HierarchyVisualizer">
+      <viztool pkgroot="com.samskivert.viztool" classes="com.samskivert.viztool.*"
+               visualizer="com.samskivert.viztool.hierarchy.HierarchyVisualizer">
         <classpath refid="your_classpath"/>
       </viztool>
     </target>
