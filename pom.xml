@@ -4,7 +4,7 @@
   <groupId>com.samskivert</groupId>
   <artifactId>viztool</artifactId>
   <packaging>jar</packaging>
-  <version>1.3-SNAPSHOT</version>
+  <version>1.3</version>
   <name>viztool</name>
   <description>A tool for generating visualizations of collections of Java classes.</description>
   <url>http://samskivert.com/code/viztool/</url>
