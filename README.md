@@ -22,11 +22,11 @@ Building viztool
 Building viztool is very simple. You can use either Ant or Maven. Build with
 Ant like so:
 
-% ant dist
+    % ant dist
 
 Or build with Maven (and install into your local repository) like so:
 
-% mvn install
+    % mvn install
 
 Using viztool
 -------------
@@ -65,8 +65,8 @@ viztool script with the package prefix you wish to visualize.
 
 For example:
 
-% export CLASSPATH=<here>/foo.jar:<there>/bar.jar:<everywhere>/baz.jar
-% ./bin/viztool --print com.whoever.mygreatpackage
+    % export CLASSPATH=<here>/foo.jar:<there>/bar.jar:<everywhere>/baz.jar
+    % ./bin/viztool --print com.whoever.mygreatpackage
 
 Because the classes are actually resolved by the JVM when visualizing, all
 classes that the visualized classes depend upon must also be loadable (meaning
@@ -79,6 +79,4 @@ Distribution
 ------------
 
 viztool is released under the GPL. The most recent version of the code is
-available here:
-
-  http://github.com/samskivert/viztool/
+available here: http://github.com/samskivert/viztool/
