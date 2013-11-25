@@ -1,19 +1,19 @@
 //
 // $Id: ClassEnumerator.java,v 1.4 2001/08/12 04:36:57 mdb Exp $
-// 
+//
 // viztool - a tool for visualizing collections of java classes
 // Copyright (C) 2001 Michael Bayne
-// 
+//
 // This program is free software; you can redistribute it and/or modify it
 // under the terms of the GNU General Public License as published by the
 // Free Software Foundation; either version 2.1 of the License, or (at your
 // option) any later version.
-// 
+//
 // This program is distributed in the hope that it will be useful, but
 // WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 // General Public License for more details.
-// 
+//
 // You should have received a copy of the GNU General Public License along
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
@@ -22,9 +22,9 @@ package com.samskivert.viztool.clenum;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * The class enumerator is supplied with a classpath which it decomposes
@@ -44,12 +44,21 @@ public class ClassEnumerator implements Iterator<String>
      */
     public ClassEnumerator (String classpath)
     {
+        this(Arrays.asList(classpath.split(File.pathSeparator)));
+    }
+
+    /**
+     * Constructs a class enumerator with the supplied (already decomposed) classpath. A set of
+     * component enumerators will be chosen for each element and warnings will be generated for
+     * components that cannot be processed for some reason or other. Those will be available
+     * following the completion of the constructor via {@link #getWarningStrings}.
+     */
+    public ClassEnumerator (List<String> classpath)
+    {
         // decompose the path and select enumerators for each component
         List<ComponentEnumerator> enums = new ArrayList<ComponentEnumerator>();
 
-        StringTokenizer tok = new StringTokenizer(classpath, File.pathSeparator);
-        while (tok.hasMoreTokens()) {
-            String component = tok.nextToken();
+        for (String component : classpath) {
             // locate an enumerator for this token
             ComponentEnumerator cenum = matchEnumerator(component);
             if (cenum == null) {
