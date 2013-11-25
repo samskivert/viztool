@@ -5,7 +5,6 @@
 
 package com.samskivert.viztool;
 
-import java.awt.print.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,36 +84,14 @@ public class Driver
         viz.setClasses(classes.iterator());
 
         if (print) {
-            // we use the print system to render things
-            PrinterJob job = PrinterJob.getPrinterJob();
-
-            // pop up a dialog to format our pages
-            // PageFormat format = job.pageDialog(job.defaultPage());
-            PageFormat format = job.defaultPage();
-
-            // use sensible margins
-            Paper paper = new Paper();
-            paper.setImageableArea(72*0.5, 72*0.5, 72*7.5, 72*10);
-            format.setPaper(paper);
-
-            // use our configured page format
-            job.setPrintable(viz, format);
-
-            // pop up a dialog to control printing
-            if (job.printDialog()) {
-                try {
-                    // invoke the printing process
-                    job.print();
-                } catch (PrinterException pe) {
-                    pe.printStackTrace(System.err);
+            try {
+                if (!PrintUtil.print(viz, null)) {
+                    Log.info("Printing cancelled.");
                 }
-
-            } else {
-                Log.info("Printing cancelled.");
+            } catch (Exception e) {
+                e.printStackTrace(System.err);
             }
-
-            // printing starts up the AWT threads, so we have to
-            // explicitly exit at this point
+            // printing starts up the AWT threads, so we have to explicitly exit at this point
             System.exit(0);
 
         } else {

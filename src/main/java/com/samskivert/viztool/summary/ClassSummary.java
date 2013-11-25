@@ -27,9 +27,9 @@ import com.samskivert.viztool.util.LayoutUtil;
 import com.samskivert.viztool.util.RenderUtil;
 
 /**
- * A class summary displays information about a particular class
- * (specifically, the interfaces it implements, the class it extends, its
- * public instances, member functions, and inner class definitions).
+ * A class summary displays information about a particular class (specifically, the interfaces it
+ * implements, the class it extends, its public instances, member functions, and inner class
+ * definitions).
  */
 public class ClassSummary
     implements Element
@@ -57,8 +57,8 @@ public class ClassSummary
             _interfaces[i] = _viz.name(interfaces[i]);
         }
 
-        // create a comparator that we can use to sort the fields and
-        // methods alphabetically and by staticness
+        // create a comparator that we can use to sort the fields and methods alphabetically and by
+        // staticness
         Comparator<Member> comp = new Comparator<Member>() {
             public int compare (Member m1, Member m2) {
                 int s1 = m1.getModifiers() & Modifier.STATIC;
@@ -128,50 +128,44 @@ public class ClassSummary
     }
 
     /**
-     * Introspects on our subject class and determines how much space
-     * we'll need to visualize it.
+     * Introspects on our subject class and determines how much space we'll need to visualize it.
      *
-     * @param gfx the graphics context in which this summary will
-     * eventually be rendered.
+     * @param gfx the graphics context in which this summary will eventually be rendered.
      */
     public void layout (Graphics2D gfx)
     {
         FontRenderContext frc = gfx.getFontRenderContext();
 
-        // the header will be the name of this class surrounded by N
-        // points of space and a box
+        // the header will be the name of this class surrounded by N points of space and a box
         Rectangle2D bounds = LayoutUtil.getTextBox(
-            _subject.isInterface() ? FontPicker.getInterfaceFont() :
-            FontPicker.getClassFont(), frc, _name);
+            _subject.isInterface() ? FontPicker.getInterfaceFont() : FontPicker.getClassFont(),
+            frc, false, _name);
         double spacing = 0;
 
         // add our parent class if we've got one
         if (_parentName != null) {
             String subtext = "extends " + _parentName;
-            bounds = LayoutUtil.accomodate(
-                bounds, FontPicker.getDeclaresFont(), frc,
-                LayoutUtil.SUBORDINATE_INSET, subtext);
+            bounds = LayoutUtil.accomodate(bounds, FontPicker.getDeclaresFont(), frc,
+                                           true, LayoutUtil.SUBORDINATE_INSET, subtext);
         }
 
         // add our interfaces
-        bounds = LayoutUtil.accomodate(
-            bounds, FontPicker.getImplementsFont(), frc,
-            LayoutUtil.SUBORDINATE_INSET, _interfaces);
+        bounds = LayoutUtil.accomodate(bounds, FontPicker.getImplementsFont(), frc,
+                                       true, LayoutUtil.SUBORDINATE_INSET, _interfaces);
 
         // add our fields
         bounds = LayoutUtil.accomodate(
-            bounds, FontPicker.getClassFont(), frc, 0, _fieldTypes, _fields);
+            bounds, FontPicker.getClassFont(), frc, true, 0, _fieldTypes, _fields);
         spacing += (_fields.length > 0) ? 2*LayoutUtil.HEADER_BORDER : 0;
 
         // add our constructors and methods
         bounds = LayoutUtil.accomodate(
-            bounds, FontPicker.getClassFont(), frc, 0,
-            _methodReturns, _methods);
+            bounds, FontPicker.getClassFont(), frc, true, 0, _methodReturns, _methods);
         spacing += (_methods.length > 0) ? 2*LayoutUtil.HEADER_BORDER : 0;
 
         // incorporate space for the gaps
-        bounds.setRect(bounds.getX(), bounds.getY(), bounds.getWidth(),
-                       bounds.getHeight() + spacing);
+        bounds.setRect(bounds.getX(), bounds.getY(),
+                       bounds.getWidth(), bounds.getHeight() + spacing);
 
         // grab the new bounds
         _bounds = bounds;
@@ -192,36 +186,29 @@ public class ClassSummary
         FontRenderContext frc = gfx.getFontRenderContext();
         Font font = _subject.isInterface() ?
             FontPicker.getInterfaceFont() : FontPicker.getClassFont();
-        Rectangle2D bnds = 
-            RenderUtil.renderString(gfx, frc, font, x, y, _name);
-        maxwid = Math.max(maxwid, bnds.getWidth() +
-                          2*LayoutUtil.HEADER_BORDER);
+        Rectangle2D bnds = RenderUtil.renderString(gfx, frc, font, false, x, y, _name);
+        maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER);
         y += bnds.getHeight();
 
         // render the parent classname
         if (_parentName != null) {
-            bnds = RenderUtil.renderString(
-                gfx, frc, FontPicker.getDeclaresFont(),
-                x + LayoutUtil.SUBORDINATE_INSET, y, _parentName);
-            maxwid = Math.max(maxwid, bnds.getWidth() +
-                              2*LayoutUtil.HEADER_BORDER +
+            bnds = RenderUtil.renderString(gfx, frc, FontPicker.getDeclaresFont(), true,
+                                           x + LayoutUtil.SUBORDINATE_INSET, y, _parentName);
+            maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER +
                               LayoutUtil.SUBORDINATE_INSET);
             y += bnds.getHeight();
         }
 
         // render our implemented interfaces
-        bnds = RenderUtil.renderStrings(
-            gfx, frc, FontPicker.getImplementsFont(),
-            x + LayoutUtil.SUBORDINATE_INSET, y, _interfaces);
-        maxwid = Math.max(maxwid, bnds.getWidth() +
-                          2*LayoutUtil.HEADER_BORDER +
+        bnds = RenderUtil.renderStrings(gfx, frc, FontPicker.getImplementsFont(), true,
+                                        x + LayoutUtil.SUBORDINATE_INSET, y, _interfaces);
+        maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER +
                           LayoutUtil.SUBORDINATE_INSET);
         y += bnds.getHeight();
 
         // stroke a box that contains the header
         Rectangle2D outline = new Rectangle2D.Double(
-            bounds.getX(), bounds.getY(),
-            maxwid, y + LayoutUtil.HEADER_BORDER - bounds.getY());
+            bounds.getX(), bounds.getY(), maxwid, y + LayoutUtil.HEADER_BORDER - bounds.getY());
         gfx.draw(outline);
 
         // leave space for a separator
@@ -233,9 +220,8 @@ public class ClassSummary
 
         // render our fields
         bnds = RenderUtil.renderStrings(
-            gfx, frc, FontPicker.getClassFont(), x, y, _fieldTypes, _fields);
-        maxwid = Math.max(maxwid, bnds.getWidth() +
-                          2*LayoutUtil.HEADER_BORDER);
+            gfx, frc, FontPicker.getClassFont(), false, x, y, _fieldTypes, _fields);
+        maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER);
         y += bnds.getHeight();
 
         // leave space for a separator
@@ -247,10 +233,8 @@ public class ClassSummary
 
         // render our constructors and methods
         bnds = RenderUtil.renderStrings(
-            gfx, frc, FontPicker.getClassFont(), x, y,
-            _methodReturns, _methods);
-        maxwid = Math.max(maxwid, bnds.getWidth() +
-                          2*LayoutUtil.HEADER_BORDER);
+            gfx, frc, FontPicker.getClassFont(), false, x, y, _methodReturns, _methods);
+        maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER);
         y += bnds.getHeight();
 
         // draw our separators now that we know how wide things are

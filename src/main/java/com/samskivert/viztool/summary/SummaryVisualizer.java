@@ -53,11 +53,9 @@ public class SummaryVisualizer implements Visualizer
     }
 
     /**
-     * Lays out the class summary visualizations into the specified page
-     * dimensions.
+     * Lays out the class summary visualizations into the specified page dimensions.
      */
-    public void layout (Graphics2D gfx, double x, double y,
-                        double width, double height)
+    public void layout (Graphics2D gfx, double x, double y, double width, double height)
     {
         // first layout all of our summaries (giving them dimensions)
         for (int i = 0; i < _summaries.size(); i++) {
@@ -105,8 +103,7 @@ public class SummaryVisualizer implements Visualizer
     {
         Graphics2D gfx = (Graphics2D)g;
 
-        // relay things out if the page format has changed or if we've
-        // never been laid out
+        // relay things out if the page format has changed or if we've never been laid out
         if (!pf.equals(_format) || _pages == null) {
             // keep this around
             _format = pf;

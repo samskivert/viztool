@@ -5,15 +5,6 @@
 
 package com.samskivert.viztool;
 
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
-import java.awt.print.PrinterException;
-import java.awt.print.PrinterJob;
-
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.Destination;
-
 import java.io.File;
 
 import java.util.ArrayList;
@@ -161,29 +152,11 @@ public class DriverTask extends Task
             }
 
         } else {
-            // we use the print system to render things
-            PrinterJob job = PrinterJob.getPrinterJob();
-
-            // use sensible margins
-            PageFormat format = job.defaultPage();
-            Paper paper = new Paper();
-            paper.setImageableArea(72*0.5, 72*0.5, 72*7.5, 72*10);
-            format.setPaper(paper);
-
-            // use our configured page format
-            job.setPrintable(viz, format);
-
-            // tell our printjob to print to a file
-            PrintRequestAttributeSet attrs =
-                new HashPrintRequestAttributeSet();
-            attrs.add(new Destination(_output.toURI()));
-
-            // invoke the printing process
             try {
                 log("Generating visualization to '" + _output.getPath() + "'.");
-                job.print(attrs);
-            } catch (PrinterException pe) {
-                throw new BuildException("Error printing visualization.", pe);
+                PrintUtil.print(viz, _output);
+            } catch (Exception e) {
+                throw new BuildException("Error printing visualization.", e);
             }
         }
     }

@@ -57,8 +57,7 @@ public class HierarchyVisualizer implements Visualizer
      * Lays out and renders each of the chain groups that make up this package hierarchy
      * visualization.
      */
-    public int print (Graphics g, PageFormat pf, int pageIndex)
-        throws PrinterException
+    public int print (Graphics g, PageFormat pf, int pageIndex) throws PrinterException
     {
         Graphics2D gfx = (Graphics2D)g;
 

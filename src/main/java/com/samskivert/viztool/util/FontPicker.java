@@ -13,9 +13,8 @@ import java.awt.Font;
 public class FontPicker
 {
     /**
-     * Instructs the font picker to choose fonts for printing or fonts for
-     * displaying on the screen based on the value of the
-     * <code>printing</code> argument.
+     * Instructs the font picker to choose fonts for printing or fonts for displaying on the screen
+     * based on the value of the <code>printing</code> argument.
      */
     public static void init (boolean printing)
     {
