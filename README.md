@@ -3,9 +3,8 @@
 As the catchy subtitle claims, viztool is used to generate visualizations of collections of Java
 classes. These visualizations are intended to be printed out and taped to the wall or set on the
 desk beside you or folded into paper airplanes and sailed around the room. Thus viztool does not
-include a sophisticated user interface for viewing these presentations onscreen (use ghostscript
-for that), although you can actually display them on the screen because the rendering is done via
-the Java 2D rendering engine.
+include a sophisticated user interface for viewing these presentations onscreen, although you can
+actually display them on the screen because the rendering is done via the Java 2D rendering engine.
 
 viztool was born from my repeated desire to be able to glance over all of the myriad classes that
 come to be involved in any large project. I knew I could go out and pay thousands of dollars for a
@@ -21,7 +20,11 @@ Build viztool (and install into your local repository) with Maven like so:
 
 ## Using viztool
 
-viztool is designed to be easily invoked from Ant or Maven.
+viztool can be used from Ant or Maven or invoked manually on the command line.
+
+### Maven
+
+See the [Viztool Maven plugin] for instructions on using Viztool in a Maven project.
 
 ### Ant
 
@@ -40,7 +43,7 @@ For Ant, add a task like the following to your build.xml file:
       </viztool>
     </target>
 
-    <!-- using manual dependnecies -->
+    <!-- using manual dependencies -->
     <target name="hierviz">
       <taskdef name="viztool" classname="com.samskivert.viztool.DriverTask">
         <classpath>
@@ -63,10 +66,6 @@ the parameters passed to the task are:
 
 the `<viztool>` element should contain a `<classpath>` element which defines the classpath over
 which viztool will iterate, searching for classes that match the specified pattern.
-
-### Maven
-
-See the [Viztool Maven plugin] for instructions on using Viztool in a Maven project.
 
 ### Manual invocation
 
