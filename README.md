@@ -1,4 +1,4 @@
-# VIZTOOL: An extensible tool for visualizing Java classes
+# An extensible tool for visualizing Java classes
 
 As the catchy subtitle claims, viztool is used to generate visualizations of collections of Java
 classes. These visualizations are intended to be printed out and taped to the wall or set on the
