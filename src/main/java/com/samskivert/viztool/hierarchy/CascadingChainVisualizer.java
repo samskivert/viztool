@@ -16,8 +16,8 @@ import com.samskivert.viztool.util.LayoutUtil;
 import com.samskivert.viztool.util.RenderUtil;
 
 /**
- * The cascading chain visualizer lays out chains in the standard
- * cascading format that looks something like this:
+ * The cascading chain visualizer lays out chains in a standard cascading format that looks
+ * something like this:
  *
  * <pre>
  * Foo
@@ -37,29 +37,26 @@ public class CascadingChainVisualizer
     {
         FontRenderContext frc = gfx.getFontRenderContext();
 
-        // the header will be the name of this chain surrounded by N
-        // points of space and a box
+        // the header will be the name of this chain surrounded by N points of space and a box
         Rectangle2D bounds = LayoutUtil.getTextBox(
             chain.getRoot().isInterface() ? FontPicker.getInterfaceFont() :
-            FontPicker.getClassFont(), frc, chain.getName());
+            FontPicker.getClassFont(), frc, false, chain.getName());
 
-        // add our inner classes and interface implementations, but only
-        // if we're not an out of package class
+        // add our inner classes and interface implementations, but only if we're not an out of
+        // package class
         if (chain.inPackage()) {
             String[] impls = chain.getImplementsNames();
-            bounds = LayoutUtil.accomodate(
-                bounds, FontPicker.getImplementsFont(),
-                frc, LayoutUtil.SUBORDINATE_INSET, impls);
+            bounds = LayoutUtil.accomodate(bounds, FontPicker.getImplementsFont(), frc, true,
+                                           LayoutUtil.SUBORDINATE_INSET, impls);
             String[] decls = chain.getDeclaresNames();
-            bounds = LayoutUtil.accomodate(
-                bounds, FontPicker.getDeclaresFont(),
-                frc, LayoutUtil.SUBORDINATE_INSET, decls);
+            bounds = LayoutUtil.accomodate(bounds, FontPicker.getDeclaresFont(), frc, true,
+                                           LayoutUtil.SUBORDINATE_INSET, decls);
         }
 
         double maxwid = bounds.getWidth();
 
-        // the children will be below the name of this chain and inset by
-        // four points to make space for the connecty lines
+        // the children will be below the name of this chain and inset by four points to make space
+        // for the connecty lines
         double x = 2*LayoutUtil.GAP, y = bounds.getHeight();
         ArrayList<Chain> kids = chain.getChildren();
 
@@ -93,32 +90,25 @@ public class CascadingChainVisualizer
         FontRenderContext frc = gfx.getFontRenderContext();
         Font font = chain.getRoot().isInterface() ?
             FontPicker.getInterfaceFont() : FontPicker.getClassFont();
-        Rectangle2D bnds = 
-            RenderUtil.renderString(gfx, frc, font, x, y, chain.getName());
-        maxwid = Math.max(maxwid, bnds.getWidth() +
-                          2*LayoutUtil.HEADER_BORDER);
+        Rectangle2D bnds = RenderUtil.renderString(gfx, frc, font, false, x, y, chain.getName());
+        maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER);
         y += bnds.getHeight();
 
-        // draw the interface and inner class info, but only if we're not
-        // an out of package class
+        // draw the interface and inner class info, but only if we're not an out of package class
         if (chain.inPackage()) {
             // render the implemented interfaces
             String[] impls = chain.getImplementsNames();
-            bnds = RenderUtil.renderStrings(
-                gfx, frc, FontPicker.getImplementsFont(),
-                x + LayoutUtil.SUBORDINATE_INSET, y, impls);
-            maxwid = Math.max(maxwid, bnds.getWidth() +
-                              2*LayoutUtil.HEADER_BORDER +
+            bnds = RenderUtil.renderStrings(gfx, frc, FontPicker.getImplementsFont(),
+                                            true, x + LayoutUtil.SUBORDINATE_INSET, y, impls);
+            maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER +
                               LayoutUtil.SUBORDINATE_INSET);
             y += bnds.getHeight();
 
             // render the declared inner classes
             String[] decls = chain.getDeclaresNames();
-            bnds = RenderUtil.renderStrings(
-                gfx, frc, FontPicker.getDeclaresFont(),
-                x + LayoutUtil.SUBORDINATE_INSET, y, decls);
-            maxwid = Math.max(maxwid, bnds.getWidth() +
-                              2*LayoutUtil.HEADER_BORDER +
+            bnds = RenderUtil.renderStrings(gfx, frc, FontPicker.getDeclaresFont(),
+                                            true, x + LayoutUtil.SUBORDINATE_INSET, y, decls);
+            maxwid = Math.max(maxwid, bnds.getWidth() + 2*LayoutUtil.HEADER_BORDER +
                               LayoutUtil.SUBORDINATE_INSET);
             y += bnds.getHeight();
         }

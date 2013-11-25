@@ -17,50 +17,48 @@ import java.awt.geom.Rectangle2D;
 public class RenderUtil
 {
     /**
-     * Renders a string to the specified graphics context, in the
-     * specified font at the specified coordinates.
+     * Renders a string to the specified graphics context, in the specified font at the specified
+     * coordinates.
      *
      * @return the bounds occupied by the rendered string.
      */
-    public static Rectangle2D renderString (
-        Graphics2D gfx, FontRenderContext frc, Font font,
-        double x, double y, String text)
+    public static Rectangle2D renderString (Graphics2D gfx, FontRenderContext frc, Font font,
+                                            boolean withLeading, double x, double y, String text)
     {
         // do the rendering
         TextLayout ilay = new TextLayout(text, font, frc);
+        float dy = withLeading ? ilay.getLeading() : 0;
         Rectangle2D ibounds = ilay.getBounds();
-        ilay.draw(gfx, (float)(x - ibounds.getX()),
-                  (float)(y - ibounds.getY()));
+        ilay.draw(gfx, (float)(x - ibounds.getX()), (float)(y + dy + ilay.getAscent()));
 
         // return the dimensions occupied by the rendered string
-        return ibounds;
+        return new Rectangle2D.Double(
+            x, y, ibounds.getWidth(), dy + ilay.getAscent() + ilay.getDescent());
     }
 
     /**
-     * Renders an array of strings to the specified graphics context, in
-     * the specified font at the specified coordinates.
+     * Renders an array of strings to the specified graphics context, in the specified font at the
+     * specified coordinates.
      *
      * @return the bounds occupied by the rendered strings.
      */
-    public static Rectangle2D renderStrings (
-        Graphics2D gfx, FontRenderContext frc, Font font,
-        double x, double y, String[] text)
+    public static Rectangle2D renderStrings (Graphics2D gfx, FontRenderContext frc, Font font,
+                                             boolean withLeading, double x, double y, String[] text)
     {
-        return renderStrings(gfx, frc, font, x, y, text, (String)null);
+        return renderStrings(gfx, frc, font, withLeading, x, y, text, (String)null);
     }
 
     /**
-     * Renders an array of strings to the specified graphics context, in
-     * the specified font at the specified coordinates. If prefix is
-     * non-null, it will be prefixed to the first string and subsequent
-     * strings will be rendered with the space necessary to line them up
-     * with the first string.
+     * Renders an array of strings to the specified graphics context, in the specified font at the
+     * specified coordinates. If prefix is non-null, it will be prefixed to the first string and
+     * subsequent strings will be rendered with the space necessary to line them up with the first
+     * string.
      *
      * @return the bounds occupied by the rendered strings.
      */
-    public static Rectangle2D renderStrings (
-        Graphics2D gfx, FontRenderContext frc, Font font,
-        double x, double y, String[] text, String prefix)
+    public static Rectangle2D renderStrings (Graphics2D gfx, FontRenderContext frc, Font font,
+                                             boolean withLeading, double x, double y, String[] text,
+                                             String prefix)
     {
         double maxwid = 0, starty = y;
         double inset = 0;
@@ -72,18 +70,18 @@ public class RenderUtil
 
         for (int i = 0; i < text.length; i++) {
             // figure some stuff out
-            String string = (i == 0 && prefix != null) ?
-                (prefix + text[i]) : text[i];
+            String string = (i == 0 && prefix != null) ? (prefix + text[i]) : text[i];
             double sinset = ((i == 0) ? 0 : inset);
 
             // do the rendering
             TextLayout ilay = new TextLayout(string, font, frc);
+            if (i > 0 || withLeading) y += ilay.getLeading();
             Rectangle2D ibounds = ilay.getBounds();
-            ilay.draw(gfx, (float)(x - ibounds.getX() + sinset),
-                      (float)(y - ibounds.getY()));
+            y += ilay.getAscent();
+            ilay.draw(gfx, (float)(x - ibounds.getX() + sinset), (float)y);
 
             maxwid = Math.max(sinset + ibounds.getWidth(), maxwid);
-            y += ibounds.getHeight();
+            y += ilay.getDescent();
         }
 
         // return the dimensions occupied by the rendered strings
@@ -91,20 +89,19 @@ public class RenderUtil
     }
 
     /**
-     * Renders a two column array of strings to the specified graphics
-     * context, in the specified font at the specified coordinates. The
-     * left column is right align and the right, left aligned.
+     * Renders a two column array of strings to the specified graphics context, in the specified
+     * font at the specified coordinates. The left column is right align and the right, left
+     * aligned.
      *
      * @return the bounds occupied by the rendered strings.
      */
-    public static Rectangle2D renderStrings (
-        Graphics2D gfx, FontRenderContext frc, Font font,
-        double x, double y, String[] left, String[] right)
+    public static Rectangle2D renderStrings (Graphics2D gfx, FontRenderContext frc, Font font,
+                                             boolean withLeading, double x, double y,
+                                             String[] left, String[] right)
     {
         double maxleft = 0, maxwid = 0, starty = y;
 
-        // first generate text layout instances and compute bounds for all
-        // entries in both columns
+        // first generate text layout instances and compute bounds for all entries in both columns
         TextLayout[] llay = new TextLayout[left.length];
         Rectangle2D[] lbnds = new Rectangle2D[left.length];
         TextLayout[] rlay = new TextLayout[right.length];
@@ -121,21 +118,18 @@ public class RenderUtil
 
         // do the rendering
         for (int i = 0; i < left.length; i++) {
+            TextLayout ll = llay[i], rl = rlay[i];
+            if (i > 0 || withLeading) y += Math.max(ll.getLeading(), rl.getLeading());
             double lw = lbnds[i].getWidth();
-            llay[i].draw(gfx, (float)(x - lbnds[i].getX() + maxleft - lw),
-                         // we actually mean to use rbnds[i] here because
-                         // the right hand side (usually being the method
-                         // declaration), tends to be taller than the left
-                         // hand side (because of the parenthesis) and
-                         // would appear a bit lower than the left hand
-                         // side if we didn't use it's y offset
-                         (float)(y - rbnds[i].getY()));
-            rlay[i].draw(gfx, (float)(x - rbnds[i].getX() + maxleft +
-                                      LayoutUtil.GAP),
-                         (float)(y - rbnds[i].getY()));
-            maxwid = Math.max(maxwid, maxleft + LayoutUtil.GAP +
-                              rbnds[i].getWidth());
-            y += Math.max(lbnds[i].getHeight(), rbnds[i].getHeight());
+            // we use rl's ascent here for both strings because the right hand side (usually being
+            // the method declaration), tends to be taller than the left hand side (because of the
+            // parenthesis) and would appear a bit lower than the left hand side if we didn't use
+            // it's y offset
+            y += rl.getAscent();
+            ll.draw(gfx, (float)(x - lbnds[i].getX() + maxleft - lw), (float)y);
+            rl.draw(gfx, (float)(x - rbnds[i].getX() + maxleft + LayoutUtil.GAP), (float)y);
+            maxwid = Math.max(maxwid, maxleft + LayoutUtil.GAP + rbnds[i].getWidth());
+            y += Math.max(ll.getDescent(), rl.getDescent());
         }
 
         // return the dimensions occupied by the rendered strings

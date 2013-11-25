@@ -199,41 +199,36 @@ public class Chain implements Element
     }
 
     /**
-     * Lays out all of the children of this chain and then requests that
-     * the supplied layout manager arrange those children and compute the
-     * dimensions of this chain based on all of that information.
+     * Lays out all of the children of this chain and then requests that the supplied layout
+     * manager arrange those children and compute the dimensions of this chain based on all of that
+     * information.
      *
      * @param gfx the graphics context to use when computing dimensions.
      * @param cviz the chain visualizer to be used for laying out.
      * @param width the width in which the chain must fit.
      * @param height the height in which the chain must fit.
      *
-     * @return if the chain cannot be laid out in the required dimensions,
-     * branches of the chain will be removed so that it can fit into the
-     * necessary dimensions. A new chain will be created with the
-     * remaining branches which should be laid out itself so that it too
-     * may further prune itself to fit into the necessary dimensions. If
-     * the chain fits into the requested dimensions, null will be
-     * returned.
+     * @return if the chain cannot be laid out in the required dimensions, branches of the chain
+     * will be removed so that it can fit into the necessary dimensions. A new chain will be
+     * created with the remaining branches which should be laid out itself so that it too may
+     * further prune itself to fit into the necessary dimensions. If the chain fits into the
+     * requested dimensions, null will be returned.
      */
-    public Chain layout (Graphics2D gfx, ChainVisualizer cviz,
-                         double width, double height)
+    public Chain layout (Graphics2D gfx, ChainVisualizer cviz, double width, double height)
     {
         // lay everything out
         layout(gfx, cviz);
 
-        // determine if we need to do some pruning (we only deal with
-        // height pruning presently)
+        // determine if we need to do some pruning (we only deal with height pruning presently)
         if (_bounds.getHeight() <= height) {
             return null;
         }
 
         double x = 0, y = 0;
         Chain oflow = pruneOverflow(x, y, width, height);
-        // if something wigged out and we try to overflow our whole selves
-        // at this point (like this chain is one big fat chain with no
-        // children that doesn't fit into the space) we must punt and
-        // pretend like there's no overflow
+        // if something wigged out and we try to overflow our whole selves at this point (like this
+        // chain is one big fat chain with no children that doesn't fit into the space) we must
+        // punt and pretend like there's no overflow
         return (oflow == this) ? null : oflow;
     }
 
@@ -249,8 +244,7 @@ public class Chain implements Element
         cviz.layoutChain(this, gfx);
     }
 
-    protected Chain pruneOverflow (
-        double x, double y, double width, double height)
+    protected Chain pruneOverflow (double x, double y, double width, double height)
     {
         // offset our current position by the position of this chain
         Rectangle2D bounds = getBounds();
